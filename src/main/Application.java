@@ -16,10 +16,10 @@ public class Application {
 
         // main menu
         setMenuBar();
-
+        // git request from IDE
         frame.add(panel);
         frame.setBounds(130,16,1100,700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
     }
