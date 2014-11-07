@@ -2,6 +2,8 @@ package main;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,17 +19,28 @@ public class Application {
     JPanel mapPanel;
     JPanel elementsPanel;
     JPanel interruptsPanel;
-
     JFrame frame;
-    BufferedImage mapImage;
+
+    BufferedImage train1Image;
+    JLabel train1Label;
+    JMenu startButton;
 
 
     public Application() {
         frame = new JFrame("TrainProject");
         mainPanel = new JPanel();
-        mapPanel = new JPanel();
         elementsPanel = new JPanel();
         interruptsPanel = new JPanel();
+
+        // map
+        mapPanel = new JPanel() {
+            Image image = (new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\img\\map.png")).getImage();
+            {setOpaque(false);}
+            public void paintComponent (Graphics g) {
+                g.drawImage(image, 0, 0, this);
+                super.paintComponent(g);
+            }
+        };
 
         mainPanel.setLayout(null);
         mapPanel.setBounds(0, 0, Map.WIDTH, Map.HEIGHT);
@@ -36,22 +49,22 @@ public class Application {
 
         elementsPanel.setLayout(new GridLayout(5,2));
         // temporarily settings
-        mapPanel.setBackground(Color.YELLOW);
+        mapPanel.setBackground(Color.ORANGE);
         elementsPanel.setBackground(Color.GREEN);
         interruptsPanel.setBackground(Color.BLUE);
 
         // main menu
         setMenuBar();
 
-        // map
         try {
-            mapImage = ImageIO.read(new File("C:\\Users\\Light\\IdeaProjects\\TrainProject\\img\\map.png"));
+            train1Image = ImageIO.read(new File("C:\\Users\\Light\\IdeaProjects\\TrainProject\\img\\test_train.png"));
         } catch (IOException e) {
-            System.out.println("Error. Invalid path to map image.");
+            System.out.println("Problem with train image file.");
+        } catch (NullPointerException e) {
+            System.out.println("Error. Invalid path to train image.");
         }
-        JLabel mapLabel = new JLabel(new ImageIcon(mapImage));
-        mapPanel.setBackground(Color.ORANGE);
-        mapPanel.add(mapLabel);
+        train1Label = new JLabel(new ImageIcon(train1Image));
+        mapPanel.add(train1Label);
 
         // elements
         elementsPanel.add(new JLabel("Test"));
@@ -74,6 +87,8 @@ public class Application {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
+        train1Label.setBounds(0, 0, 23, 21);
+        run();
     }
 
     private void setMenuBar() {
@@ -82,8 +97,16 @@ public class Application {
         menuBar.add(menuItem);
         menuItem = getTranslation();
         menuBar.add(menuItem);
-        menuItem = new JMenu("Пуск");
-        menuBar.add(menuItem);
+        startButton = new JMenu("Пуск");
+        menuBar.add(startButton);
+        startButton.addMenuListener(new MenuListener() {
+            public void menuSelected(MenuEvent e) {
+                System.out.println("menuSelected");
+                run();
+            }
+            public void menuDeselected(MenuEvent e) {}
+            public void menuCanceled(MenuEvent e) {}
+        });
         frame.setJMenuBar(menuBar);
     }
 
@@ -123,7 +146,20 @@ public class Application {
         return myMenu;
     }
 
+    private void run() {
+        for (int i = 0; i < 20; i++) {
+            train1Label.setBounds(i*10, 0, 23, 21);
+            try {
+                Thread.sleep(100);
+                System.out.println("test");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Application app = new Application();
     }
+
 }
