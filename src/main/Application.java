@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 /**
  * Created by Light on 05.11.2014.
@@ -25,8 +26,16 @@ public class Application {
     JLabel train1Label;
     JMenu startButton;
 
+    Hashtable<String, Integer> prop;
 
     public Application() {
+
+        prop = Config.getProperties();
+
+        for (String key : prop.keySet()) {
+            System.out.println(key + ": " + prop.get(key));
+        }
+
         frame = new JFrame("TrainProject");
         mainPanel = new JPanel();
         elementsPanel = new JPanel();
@@ -34,7 +43,7 @@ public class Application {
 
         // map
         mapPanel = new JPanel() {
-            Image image = (new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\img\\map.png")).getImage();
+            Image image = (new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\map.png")).getImage();
             {setOpaque(false);}
             public void paintComponent (Graphics g) {
                 g.drawImage(image, 0, 0, this);
@@ -43,9 +52,9 @@ public class Application {
         };
 
         mainPanel.setLayout(null);
-        mapPanel.setBounds(0, 0, Map.WIDTH, Map.HEIGHT);
-        elementsPanel.setBounds(Map.WIDTH + 20, 0, 260, Map.HEIGHT);
-        interruptsPanel.setBounds(0, Map.HEIGHT + 5, 880, 40);
+        mapPanel.setBounds(0, 0, prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
+        elementsPanel.setBounds(prop.get("Map.WIDTH") + 20, 0, 260, prop.get("Map.HEIGHT"));
+        interruptsPanel.setBounds(0, prop.get("Map.HEIGHT") + 5, 880, 40);
 
         elementsPanel.setLayout(new GridLayout(5,2));
         // temporarily settings
@@ -57,7 +66,7 @@ public class Application {
         setMenuBar();
 
         try {
-            train1Image = ImageIO.read(new File("C:\\Users\\Light\\IdeaProjects\\TrainProject\\img\\test_train.png"));
+            train1Image = ImageIO.read(new File("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\test_train.png"));
         } catch (IOException e) {
             System.out.println("Problem with train image file.");
         } catch (NullPointerException e) {
@@ -151,7 +160,7 @@ public class Application {
             train1Label.setBounds(i*10, 0, 23, 21);
             try {
                 Thread.sleep(100);
-                System.out.println("test");
+//                System.out.println("test");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
