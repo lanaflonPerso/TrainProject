@@ -29,12 +29,8 @@ public class Application {
     Hashtable<String, Integer> prop;
 
     public Application() {
-
+        // get properties
         prop = Config.getProperties();
-
-        for (String key : prop.keySet()) {
-            System.out.println(key + ": " + prop.get(key));
-        }
 
         frame = new JFrame("TrainProject");
         mainPanel = new JPanel();
@@ -52,8 +48,8 @@ public class Application {
         };
 
         mainPanel.setLayout(null);
-        mapPanel.setBounds(0, 0, prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
-        elementsPanel.setBounds(prop.get("Map.WIDTH") + 20, 0, 260, prop.get("Map.HEIGHT"));
+        mapPanel.setBounds(prop.get("Map.PADDING_LEFT"), prop.get("Map.PADDING_TOP"), prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
+        elementsPanel.setBounds(prop.get("Map.WIDTH") + prop.get("ElementsPanel.PADDING_LEFT"), prop.get("ElementsPanel.PADDING_TOP"), prop.get("ElementsPanel.WIDTH"), prop.get("Map.HEIGHT"));
         interruptsPanel.setBounds(0, prop.get("Map.HEIGHT") + 5, 880, 40);
 
         elementsPanel.setLayout(new GridLayout(5,2));
@@ -92,7 +88,8 @@ public class Application {
         mainPanel.add(interruptsPanel);
 
         frame.add(mainPanel);
-        frame.setBounds(225,16,900,700);
+        frame.setBounds(0,0,prop.get("Window.WIDTH"),prop.get("Window.HEIGHT"));
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
