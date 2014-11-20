@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c488c07f-96a1-4fa4-be0d-88ce8206dff0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Application.java" afterPath="$PROJECT_DIR$/src/main/Application.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Config.java" afterPath="$PROJECT_DIR$/src/main/Config.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/config.properties" afterPath="$PROJECT_DIR$/resources/config.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Map.java" afterPath="$PROJECT_DIR$/src/main/Map.java" />
     </list>
     <ignored path="TrainProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,13 +26,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Application.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Application.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="611" max-vertical-offset="3009">
-              <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.21683674" vertical-offset="51" max-vertical-offset="3009">
+              <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#4616#4985#0" expanded="true" />
                 <element signature="e#4974#4975#0" expanded="true" />
                 <element signature="e#5739#5740#0" expanded="true" />
@@ -43,14 +41,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Config.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Config.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/Config.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.24444444" vertical-offset="71" max-vertical-offset="748">
-              <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#271#288#0" expanded="true" />
+                <element signature="e#228#245#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,8 +57,8 @@
       <file leaf-file-name="Map.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/Map.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -80,9 +78,9 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/src/main/Application.java" />
         <option value="$PROJECT_DIR$/src/main/Map.java" />
         <option value="$PROJECT_DIR$/src/main/Config.java" />
-        <option value="$PROJECT_DIR$/src/main/Application.java" />
       </list>
     </option>
   </component>
@@ -453,7 +451,7 @@
       <workItem from="1415824334914" duration="186000" />
       <workItem from="1416386018901" duration="3584000" />
       <workItem from="1416440471978" duration="154000" />
-      <workItem from="1416471479312" duration="7227000" />
+      <workItem from="1416471479312" duration="10375000" />
     </task>
     <task id="LOCAL-00001" summary="Just a commit from IDE">
       <created>1415237729736</created>
@@ -475,7 +473,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33307000" />
+    <option name="totallyTimeSpent" value="36455000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -544,7 +542,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="2057" max-vertical-offset="2873">
           <caret line="121" column="42" selection-start-line="121" selection-start-column="42" selection-end-line="121" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#4616#4985#0" expanded="true" />
             <element signature="e#4974#4975#0" expanded="true" />
             <element signature="e#5739#5740#0" expanded="true" />
@@ -566,7 +563,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="2839">
           <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#4616#4985#0" expanded="true" />
             <element signature="e#4974#4975#0" expanded="true" />
             <element signature="e#5739#5740#0" expanded="true" />
@@ -588,7 +584,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="407" max-vertical-offset="2839">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#4616#4985#0" expanded="true" />
             <element signature="e#4974#4975#0" expanded="true" />
             <element signature="e#5739#5740#0" expanded="true" />
@@ -610,7 +605,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="407" max-vertical-offset="2907">
           <caret line="63" column="38" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
           <folding>
-            <element signature="imports" expanded="true" />
             <element signature="e#4616#4985#0" expanded="true" />
             <element signature="e#4974#4975#0" expanded="true" />
             <element signature="e#5739#5740#0" expanded="true" />
@@ -652,33 +646,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="611" max-vertical-offset="3009">
-          <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4616#4985#0" expanded="true" />
-            <element signature="e#4974#4975#0" expanded="true" />
-            <element signature="e#5739#5740#0" expanded="true" />
-            <element signature="e#5790#5791#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Config.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24444444" vertical-offset="71" max-vertical-offset="748">
-          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#271#288#0" expanded="true" />
+            <element signature="e#228#245#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21683674" vertical-offset="51" max-vertical-offset="3009">
+          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+          <folding>
+            <element signature="e#4616#4985#0" expanded="true" />
+            <element signature="e#4974#4975#0" expanded="true" />
+            <element signature="e#5739#5740#0" expanded="true" />
+            <element signature="e#5790#5791#0" expanded="true" />
           </folding>
         </state>
       </provider>

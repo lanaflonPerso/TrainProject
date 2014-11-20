@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Properties;
 
-/**
- * Created by Light on 20.11.2014.
- */
 public class Config {
     private static Hashtable<String, Integer> properties = new  Hashtable<String, Integer>();
     /**
