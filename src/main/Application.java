@@ -17,7 +17,7 @@ import java.util.Hashtable;
  */
 public class Application {
     JPanel mainPanel;
-    JPanel mapPanel;
+    MapPanel mapPanel;
     JPanel elementsPanel;
     JPanel interruptsPanel;
     JFrame frame;
@@ -38,21 +38,14 @@ public class Application {
         interruptsPanel = new JPanel();
 
         // map
-        mapPanel = new JPanel() {
-            Image image = (new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\map.png")).getImage();
-            {setOpaque(false);}
-            public void paintComponent (Graphics g) {
-                g.drawImage(image, 0, 0, this);
-                super.paintComponent(g);
-            }
-        };
+        mapPanel = new MapPanel();
 
         mainPanel.setLayout(null);
         mapPanel.setBounds(prop.get("Map.PADDING_LEFT"), prop.get("Map.PADDING_TOP"), prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         elementsPanel.setBounds(prop.get("Map.WIDTH") + prop.get("ElementsPanel.PADDING_LEFT"), prop.get("ElementsPanel.PADDING_TOP"), prop.get("ElementsPanel.WIDTH"), prop.get("Map.HEIGHT"));
         interruptsPanel.setBounds(prop.get("InterruptsPanel.PADDING_LEFT"), prop.get("Map.HEIGHT") + prop.get("InterruptsPanel.PADDING_TOP"), prop.get("Window.WIDTH"), prop.get("InterruptsPanel.HEIGHT"));
 
-        elementsPanel.setLayout(new GridLayout(5,2));
+        elementsPanel.setLayout(new GridLayout(5, 2));
         // temporarily settings
         mapPanel.setBackground(Color.ORANGE);
         elementsPanel.setBackground(Color.GREEN);
@@ -61,8 +54,9 @@ public class Application {
         // main menu
         setMenuBar();
 
+        // Application.class.getClassLoader().getResource("test_train.png").getPath();
         try {
-            train1Image = ImageIO.read(new File("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\test_train.png"));
+            train1Image = ImageIO.read(new File("resources\\img\\test_train.png"));
         } catch (IOException e) {
             System.out.println("Problem with train image file.");
         } catch (NullPointerException e) {
@@ -94,7 +88,7 @@ public class Application {
         frame.setResizable(false);
         frame.setVisible(true);
         train1Label.setBounds(0, 0, 23, 21);
-        run();
+        runApp();
     }
 
     private void setMenuBar() {
@@ -108,7 +102,8 @@ public class Application {
         startButton.addMenuListener(new MenuListener() {
             public void menuSelected(MenuEvent e) {
                 System.out.println("menuSelected");
-                run();
+//                runApp();
+//                mapPanel.repaint();
             }
             public void menuDeselected(MenuEvent e) {}
             public void menuCanceled(MenuEvent e) {}
@@ -152,15 +147,16 @@ public class Application {
         return myMenu;
     }
 
-    private void run() {
+    private void runApp() {
+        Thread thread = new Thread();
         for (int i = 0; i < 20; i++) {
             train1Label.setBounds(i*10, 0, 23, 21);
             try {
                 Thread.sleep(100);
 //                System.out.println("test");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ignored) {
             }
+            mapPanel.repaint();
         }
     }
 

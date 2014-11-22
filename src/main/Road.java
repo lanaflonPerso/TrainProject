@@ -40,13 +40,13 @@ public class Road {
         int i = 0;
         for (Cords xy : this.way) {
             i++;
-            if (ComparePositions(way, xy)) {
-                if (this.ends.get(0) == destination)
+            /*if (ComparePositions(way, xy)) {
+                if (this.ends.get(0).equals(destination))
                     return this.way.get(i--);
-                else if (this.ends.get(1) == destination)
+                else if (this.ends.get(1).equals(destination))
                     return this.way.get(i++);
                 else return null; // треба опрацювати варіант false
-            }
+            }*/
         }
         return null;
     }
