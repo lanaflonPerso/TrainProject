@@ -10,23 +10,26 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Hashtable;
 
 /**
  * Created by Light on 05.11.2014.
  */
-public class Application {
+public class Application implements Runnable {
     JPanel mainPanel;
     MapPanel mapPanel;
     JPanel elementsPanel;
     JPanel interruptsPanel;
     JFrame frame;
 
+    Thread thread;
+    boolean running;
+
     BufferedImage train1Image;
-    JLabel train1Label;
     JMenu startButton;
 
-    Hashtable<String, Integer> prop;
+    static Hashtable<String, Integer> prop;
 
     public Application() {
         // get properties
@@ -39,6 +42,9 @@ public class Application {
 
         // map
         mapPanel = new MapPanel();
+
+        running = false;
+        thread =  new Thread(this, "Main Loop");
 
         mainPanel.setLayout(null);
         mapPanel.setBounds(prop.get("Map.PADDING_LEFT"), prop.get("Map.PADDING_TOP"), prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
@@ -62,8 +68,6 @@ public class Application {
         } catch (NullPointerException e) {
             System.out.println("Error. Invalid path to train image.");
         }
-        train1Label = new JLabel(new ImageIcon(train1Image));
-        mapPanel.add(train1Label);
 
         // elements
         elementsPanel.add(new JLabel("Test"));
@@ -82,13 +86,11 @@ public class Application {
         mainPanel.add(interruptsPanel);
 
         frame.add(mainPanel);
-        frame.setBounds(0,0,prop.get("Window.WIDTH"),prop.get("Window.HEIGHT"));
+        frame.setBounds(0, 0, prop.get("Window.WIDTH"), prop.get("Window.HEIGHT"));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
-        train1Label.setBounds(0, 0, 23, 21);
-        runApp();
     }
 
     private void setMenuBar() {
@@ -102,8 +104,7 @@ public class Application {
         startButton.addMenuListener(new MenuListener() {
             public void menuSelected(MenuEvent e) {
                 System.out.println("menuSelected");
-//                runApp();
-//                mapPanel.repaint();
+                thread.start();
             }
             public void menuDeselected(MenuEvent e) {}
             public void menuCanceled(MenuEvent e) {}
@@ -131,6 +132,10 @@ public class Application {
                 if (exitResult == 0) {
                     System.exit(0);
                 }
+                // remove it
+                // remove it
+                // remove it
+                running = false;
             }
         });
         return myMenu;
@@ -147,17 +152,21 @@ public class Application {
         return myMenu;
     }
 
-    private void runApp() {
-        Thread thread = new Thread();
-        for (int i = 0; i < 20; i++) {
-            train1Label.setBounds(i*10, 0, 23, 21);
+    @Override
+    public void run() {
+        running = true;
+        while (running) {
+            System.out.println(new Date());
             try {
-                Thread.sleep(100);
-//                System.out.println("test");
+                Thread.sleep(2000);
             } catch (InterruptedException ignored) {
             }
             mapPanel.repaint();
         }
+    }
+
+    static public Hashtable<String, Integer> getProperties() {
+        return (Hashtable<String, Integer>)prop.clone();
     }
 
     public static void main(String[] args) {
