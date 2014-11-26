@@ -3,12 +3,12 @@ package main;
 /**
  * Світлофори
  */
-class Light {
+public class Light {
     String name; // Ім’я світлофора
     boolean enable; // Вкл./Викл.
     Cords position; // Координати розміщення світлофора
 
-    Light (String name, Cords position) {
+    public Light (String name, Cords position) {
         this.name = name;
         this.enable = true;
         this.position = position;
