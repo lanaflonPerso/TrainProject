@@ -18,15 +18,16 @@ public class TrainTest {
         Train t3 = new Train("T1", new Cords(17,12), null, null);
         Train[] trains = new Train[]{t1, t2, t3};
 
-        /*T.Add(“T1”, cords(1,4), {“S2”, “S3”, “S1”, “S3”});
-        T.Add(“T2”, cords(3,1), {“S1”, “S2”, “S3”, “S2”});
-        T.Add(“T3”, cords(17,12), {“S3”, “S1”, “S2”, “S1”});*/
-
         // ініціація станцій
         Station s1 = new Station("S1", new Cords(3,1), new Train[]{t2});
         Station s2 = new Station("S2", new Cords(1,14), new Train[]{t1});
         Station s3 = new Station("S3", new Cords(17,11), new Train[]{t3});
         Station[] stations = new Station[]{s1, s2, s3};
+
+        // задаємо маршрути для кожного потяга
+        t1.route = new Station[] {s2, s3, s1, s3};
+        t2.route = new Station[] {s1, s1, s3, s2};
+        t3.route = new Station[] {s3, s1, s2, s1};
 
         // ініціація перемикача
         Switch p = new Switch("P", new Cords(8,11));

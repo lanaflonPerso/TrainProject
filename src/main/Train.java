@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Train {
     String name; // Ім’я потяга
     int destinationIndex; //Індекс маршруту, що відображає пункт призначення
-    Station[] route; // Маршрут -> route[destinationIndex] – поточний пункт
+    public Station[] route; // Маршрут -> route[destinationIndex] – поточний пункт
     Cords position; // Поточні координати розміщення потяга
     boolean action; // Чи рухається?
     Location location;
@@ -27,14 +27,14 @@ public class Train {
     }
 
     // Змінна пункту призначення
-    void nextDestination() { // Потяг досяг станції, тому змінюємо індекс на
+    public void nextDestination() { // Потяг досяг станції, тому змінюємо індекс на
         // наступний в маршруті
         this.destinationIndex++;
         if (this.destinationIndex == 4) this.destinationIndex = 0;
     }
 
     // Рух потяга
-    void move(ArrayList<Station> ss, Switch p) { // Рух потягу
+    public void move(ArrayList<Station> ss, Switch p) { // Рух потягу
         if (this.action) { // Якщо потяг рухається
             // Пересування по дорозі
             Road road = (Road)location;
@@ -76,7 +76,7 @@ public class Train {
     }
 
     // Перевірка шлагбаума
-    void checkBarriers(ArrayList<Barrier> bs) { // Потяг перед/після шлагбаума
+    public void checkBarriers(ArrayList<Barrier> bs) { // Потяг перед/після шлагбаума
         for (Barrier b : bs) {
             if ((Cords.compare(this.position, b.position.get(0))) || (Cords.compare(this.position, b.position.get(1))))
                 b.changeStage();
@@ -84,7 +84,7 @@ public class Train {
     }
 
     // Перевірка світлофору
-    void checkLights(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
+    public void checkLights(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
         // Потяг на світлофорі
         for (Light l : ls) {
             // Якщо потяг на клітинці зі світлофором
@@ -111,7 +111,7 @@ public class Train {
     }
 
     // Перемикається перемикач
-    void switchSystem(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
+    public void switchSystem(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
         // Ініціює масив для визначення світлофора, який включить червоний
         ArrayList<String> redLights = new ArrayList<String>();
         redLights.add("L2");
