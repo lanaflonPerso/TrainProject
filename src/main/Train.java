@@ -6,11 +6,11 @@ public class Train {
     String name; // Ім’я потяга
     int destinationIndex; //Індекс маршруту, що відображає пункт призначення
     public Station[] route; // Маршрут -> route[destinationIndex] – поточний пункт
-    Cords position; // Поточні координати розміщення потяга
-    boolean action; // Чи рухається?
-    Location location;
+    public Cords position; // Поточні координати розміщення потяга
+    public boolean action; // Чи рухається?
+    public Location location;
 
-    public Train(String name, Cords position, Station[] route, Road road) {
+    public Train(String name, Cords position) {
         this.name = name;
         this.destinationIndex = 0;
         this.position = position;
@@ -20,28 +20,40 @@ public class Train {
         for (Station r : route) {
             this.route[i++] = r;
         }
-        this.action = false;
-        this.location = road;
+        this.action = true;
         // out: малює потяг
         // out: відображення стану “ набирає пасажирів ”
     }
 
     // Змінна пункту призначення
-    public void nextDestination() { // Потяг досяг станції, тому змінюємо індекс на
+    public void setNextDestination() { // Потяг досяг станції, тому змінюємо індекс на
         // наступний в маршруті
         this.destinationIndex++;
         if (this.destinationIndex == 4) this.destinationIndex = 0;
     }
 
     // Рух потяга
-    public void move(ArrayList<Station> ss, Switch p) { // Рух потягу
+    public void move() { // Рух потягу
+        Station[] ss = Core.getAllS();
+        Switch p = Core.p;
         if (this.action) { // Якщо потяг рухається
             // Пересування по дорозі
             Road road = (Road)location;
             int currentRoadIndex = road.way.indexOf(position);
+//            System.out.println(road.way);
             // the next coordinate depends on direction of train
-            int nextRoadIndex = (getNextDestination() == road.end) ? currentRoadIndex+1 : currentRoadIndex-1;
-
+            int nextRoadIndex;
+            if (!(road.end instanceof Switch)) {
+                if (getNextDestination() == road.end)
+                    nextRoadIndex = currentRoadIndex+1;
+                else
+                    nextRoadIndex = currentRoadIndex-1;
+            } else {
+                if (getNextDestination() == road.start)
+                    nextRoadIndex = currentRoadIndex-1;
+                else
+                    nextRoadIndex = currentRoadIndex+1;
+            }
             position = road.way.get(nextRoadIndex);
             // out: змінює стан потяга на “рух (координати)”
             // repaint
@@ -59,10 +71,10 @@ public class Train {
             // Якщо потяг на перемикачі
             if (Cords.compare(this.position, p.position)) {
                 // Ставить потяг на наступну дорогу
-                if (getLastDestination() == ss.get(0)) { // s1
+                if (getLastDestination() == ss[0]) { // s1
                     // this.road = "R1p";
 //                    NEED ROAD OBJECT
-                } else if (getLastDestination() == ss.get(0)) { // s2
+                } else if (getLastDestination() == ss[0]) { // s2
                     // this.road = "R2p";
 //                    NEED ROAD OBJECT
                 } else { // s3
@@ -76,7 +88,8 @@ public class Train {
     }
 
     // Перевірка шлагбаума
-    public void checkBarriers(ArrayList<Barrier> bs) { // Потяг перед/після шлагбаума
+    public void checkBarriers() { // Потяг перед/після шлагбаума
+        Barrier[] bs = Core.getAllB();
         for (Barrier b : bs) {
             if ((Cords.compare(this.position, b.position.get(0))) || (Cords.compare(this.position, b.position.get(1))))
                 b.changeStage();
@@ -84,7 +97,8 @@ public class Train {
     }
 
     // Перевірка світлофору
-    public void checkLights(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
+    public void checkLights() {
+        Light[] ls = Core.getAllL();
         // Потяг на світлофорі
         for (Light l : ls) {
             // Якщо потяг на клітинці зі світлофором
@@ -104,24 +118,28 @@ public class Train {
                         // out: світлофора l на мапі зеленим кольором
                     }
                     // Перемикається перемикач
-                    this.switchSystem(ls, p, rs);
+                    this.switchSystem();
                 }
             }
         }
     }
 
     // Перемикається перемикач
-    public void switchSystem(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
+    public void switchSystem() {
+        Light[] ls = Core.getAllL();
+        Road[] rs  = Core.getAllR();
+        Switch p   = Core.p;
         // Ініціює масив для визначення світлофора, який включить червоний
         ArrayList<String> redLights = new ArrayList<String>();
+        redLights.add("L1");
         redLights.add("L2");
         redLights.add("L3");
         Road road = (Road)location;
         // Визначає звідкіля їде потяг
-        if (road == rs.get(2)) { // Rs[“R1p”]
+        if (road == rs[2]) { // Rs[“R1p”]
             p.direction.set(0, Core.s1);
             redLights.remove("L1");
-        } else if (road == rs.get(3)) { // Rs[“R2p”]
+        } else if (road == rs[3]) { // Rs[“R2p”]
             p.direction.set(0, Core.s2);
             redLights.remove("L2");
         } else { // Rs[“R3p”]
@@ -131,9 +149,9 @@ public class Train {
         // Визначає куди їде потяг
         p.direction.set(1, getLastDestination());
         // Виключає зі списку визначення світлофору з червоним кольором
-        if (p.direction.get(1) == rs.get(2)) { // Rs[“R1p”]
+        if (p.direction.get(1) == Core.r1p) { // Rs[“R1p”]
             redLights.remove("L1");
-        } else if (p.direction.get(1) == rs.get(3)) { // Rs[“R2p”]
+        } else if (p.direction.get(1) == Core.r2p) { // Rs[“R2p”]
             redLights.remove("L2");
         } else { // Rs[“R3p”]
             redLights.remove("L3");

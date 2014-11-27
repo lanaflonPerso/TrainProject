@@ -13,6 +13,7 @@ public class Station implements Location {
     public Station(String name, Cords position, Train[] trains){
         this.name = name;
         this.position = position;
+        storage = new ArrayList<Train>();
         // ініціювання пустих this.storage
         for(Train t : trains) {
             this.storage.add(t);
@@ -25,7 +26,7 @@ public class Station implements Location {
     }
 
     // Перевірка приїзду потяга
-    void checkNew() {
+    public void checkNew() {
         for(Train t : Core.getAllT()) {
             if ((Cords.compare(this.position, t.position)) // якщо потяг на станції
                 &&(!isInStorage(t))) { // якщо потяг ще не доданий у склад
@@ -35,14 +36,14 @@ public class Station implements Location {
     }
 
     // Запис про приїзд потяга
-    void trainArrive (Train train) {
+    public void trainArrive (Train train) {
         // out: міняє стан на "Приймає потяг T"
         this.storage.add(train);
-        train.nextDestination();
+        train.setNextDestination();
     }
 
     // Підготовка до відправлення потяга
-    void checkStorage() {
+    public void checkStorage() {
         Train[] ts = Core.getAllT();
         Road[] rs  = Core.getAllR();
         if (!this.storageEmpty()) { // якщо є потяги на станції
