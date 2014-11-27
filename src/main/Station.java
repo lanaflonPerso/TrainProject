@@ -48,10 +48,10 @@ public class Station implements Location {
                 for(Train t : ts) {
                     if (t.name == tString) {
                         // перевірка маршруту
-                        Road current = this.checkRoads(t.route.get(t.destinationIndex), rs, ts);
+                        Road current = this.checkRoads(t.getLastDestination(), rs, ts);
                         if (current != null) {
                             this.storage.remove (t.name); // виїжджає із станції
-                            t.road = current.name; // ставить потяг на дорогу
+                            t.location = current; // ставить потяг на дорогу
                             current.trains.add(t.name); // на дорозі потяг
                         } else {
                             // out: стан станції "потяг затримується"
@@ -73,9 +73,9 @@ public class Station implements Location {
 	R2p i R3p
 S1↔S2:
 	R2p i R3p */
-    Road checkRoads(String stationTo, ArrayList<Road> rs, ArrayList<Train> ts) {
+    Road checkRoads(Station stationTo, ArrayList<Road> rs, ArrayList<Train> ts) {
             // S1↔S2
-        if ((this.name == "S1")&&(stationTo == "S2") || (this.name == "S2")&&(stationTo == "S1")) {
+        if ((this == Core.s1)&&(stationTo == Core.s2) || (this == Core.s2)&&(stationTo == Core.s1)) {
                 if (!rs.get(0).trainsEmpty()) { // Якщо R12 дорога не пуста
                     for (String tString : rs.get(0).trains)
                         for (Train t : ts)

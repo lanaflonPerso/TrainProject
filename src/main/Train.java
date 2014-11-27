@@ -5,18 +5,18 @@ import java.util.ArrayList;
 public class Train {
     String name; // Ім’я потяга
     int destinationIndex; //Індекс маршруту, що відображає пункт призначення
-    ArrayList<Location> route; // Маршрут -> route[destinationIndex] – поточний пункт
+    ArrayList<Station> route; // Маршрут -> route[destinationIndex] – поточний пункт
     Cords position; // Поточні координати розміщення потяга
     boolean action; // Чи рухається?
     Location location;
 
-    public Train(String name, Cords position, ArrayList<Location> route, Road road) {
+    public Train(String name, Cords position, ArrayList<Station> route, Road road) {
         this.name = name;
         this.destinationIndex = 0;
         this.position = position;
         // ініціювання пустих this.route
-        this.route = new ArrayList<Location>(5);
-        for (Location r : route) {
+        this.route = new ArrayList<Station>(5);
+        for (Station r : route) {
             this.route.add(r);
         }
         this.action = false;
@@ -152,11 +152,11 @@ public class Train {
         }
     }
 
-    private Location getLastDestination() {
+    public Station getLastDestination() {
         return this.route.get(destinationIndex);
     }
 
-    private Location getNextDestination() {
+    public Station getNextDestination() {
         int index = (destinationIndex == 4) ? 0 : destinationIndex+1;
         return this.route.get(index);
     }
