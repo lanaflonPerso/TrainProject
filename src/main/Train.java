@@ -49,8 +49,6 @@ public class Train {
             for (Station s : ss) {
                 if (Cords.compare(this.position, s.position)) {
                     this.action = false;
-                    // Знімає з дороги потяг
-                    road.trains.remove(this);
                     // Потяг на станції
                     this.location = s;
                     // out: змінює стан потяга на “випускає пасажирів”

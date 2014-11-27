@@ -23,4 +23,13 @@ public class Road implements Location {
             this.way.add(w);
         }
     }
+
+    public boolean isEmpty() {
+        for(Train t : Core.getAllT()) {
+            if (t.location == this) {
+                return false;
+            }
+        }
+        return false;
+    }
 }
