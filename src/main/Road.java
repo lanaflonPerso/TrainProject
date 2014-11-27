@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Light on 20.11.2014.
  */
-public class Road {
+public class Road implements Location {
     String name; // Ім’я дороги
     // Імена станцій/перемикача на кінцях дороги
     String start;

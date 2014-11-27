@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Станції
  */
-class Station {
+public class Station implements Location {
     String name; // Ім’я станції
     Cords position; // Координати розміщення станції
     ArrayList<String> storage; // Перелік потягів на станції
