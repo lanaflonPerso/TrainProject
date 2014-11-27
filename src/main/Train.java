@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Train {
     String name; // Ім’я потяга
     int destinationIndex; //Індекс маршруту, що відображає пункт призначення
-    ArrayList<Station> route; // Маршрут -> route[destinationIndex] – поточний пункт
+    Station[] route; // Маршрут -> route[destinationIndex] – поточний пункт
     Cords position; // Поточні координати розміщення потяга
     boolean action; // Чи рухається?
     Location location;
@@ -15,9 +15,10 @@ public class Train {
         this.destinationIndex = 0;
         this.position = position;
         // ініціювання пустих this.route
-        this.route = new ArrayList<Station>(5);
+        this.route = new Station[5];
+        int i = 0;
         for (Station r : route) {
-            this.route.add(r);
+            this.route[i++] = r;
         }
         this.action = false;
         this.location = road;
@@ -128,7 +129,7 @@ public class Train {
             redLights.remove("L3");
         }
         // Визначає куди їде потяг
-        p.direction.set(1, this.route.get(this.destinationIndex));
+        p.direction.set(1, getLastDestination());
         // Виключає зі списку визначення світлофору з червоним кольором
         if (p.direction.get(1) == rs.get(2)) { // Rs[“R1p”]
             redLights.remove("L1");
@@ -151,11 +152,11 @@ public class Train {
     }
 
     public Station getLastDestination() {
-        return this.route.get(destinationIndex);
+        return this.route[destinationIndex];
     }
 
     public Station getNextDestination() {
         int index = (destinationIndex == 4) ? 0 : destinationIndex+1;
-        return this.route.get(index);
+        return this.route[index];
     }
 }
