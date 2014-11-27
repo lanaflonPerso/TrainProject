@@ -10,7 +10,7 @@ public class Train {
     boolean action; // Чи рухається?
     Location location;
 
-    public Train(String name, Cords position, ArrayList<Station> route, Road road) {
+    public Train(String name, Cords position, Station[] route, Road road) {
         this.name = name;
         this.destinationIndex = 0;
         this.position = position;

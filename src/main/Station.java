@@ -10,7 +10,7 @@ public class Station implements Location {
     Cords position; // Координати розміщення станції
     ArrayList<Train> storage; // Перелік потягів на станції
 
-    public Station (String name, Cords position, ArrayList<Train> trains){
+    public Station(String name, Cords position, Train[] trains){
         this.name = name;
         this.position = position;
         // ініціювання пустих this.storage
@@ -25,8 +25,8 @@ public class Station implements Location {
     }
 
     // Перевірка приїзду потяга
-    void checkNew(ArrayList<Train> ts) {
-        for(Train t : ts) {
+    void checkNew() {
+        for(Train t : Core.getAllT()) {
             if ((Cords.compare(this.position, t.position)) // якщо потяг на станції
                 &&(!isInStorage(t))) { // якщо потяг ще не доданий у склад
                 this.trainArrive(t);

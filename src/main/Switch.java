@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Перемикач
  */
-public class Switch {
+public class Switch implements Location {
     String name; // Ім’я перемикача
     ArrayList<Location> direction; // Імена станція ↔ станція
     Cords position; // Координати розміщення світлофора

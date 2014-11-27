@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Light on 20.11.2014.
@@ -13,7 +12,7 @@ public class Road implements Location {
     Location end;
     ArrayList<Cords> way; // Перелік всіх координат дороги
 
-    public Road(String name, Location start, Location end, List<Cords> way) {
+    public Road(String name, Location start, Location end, ArrayList<Cords> way) {
         this.name = name;
         this.start = start;
         this.end = end;
