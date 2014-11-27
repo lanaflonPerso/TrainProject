@@ -7,16 +7,16 @@ import java.util.ArrayList;
  */
 public class Switch {
     String name; // Ім’я перемикача
-    ArrayList<String> direction; // Імена станція ↔ станція
+    ArrayList<Location> direction; // Імена станція ↔ станція
     Cords position; // Координати розміщення світлофора
 
     public Switch (String name, Cords position) {
         this.name = name;
         this.position = position;
 
-        direction = new ArrayList<String>();
-        direction.add("S1");
-        direction.add("S2");
+        direction = new ArrayList<Location>();
+        direction.add(Core.s1);
+        direction.add(Core.s2);
         // out: малює перемикач і стан “1↔2”
     }
 }
