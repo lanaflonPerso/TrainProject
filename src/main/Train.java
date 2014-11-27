@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Train {
     String name; // Ім’я потяга
@@ -9,9 +8,11 @@ public class Train {
     ArrayList<String> route; // Маршрут -> route[destinationIndex] – поточний пункт
     Cords position; // Поточні координати розміщення потяга
     boolean action; // Чи рухається?
-    String road; // На якій дорозі/станції знаходиться
+    Road road; // На якій дорозі/станції знаходиться
+    Station station;
+    Location location;
 
-    public Train(String name, Cords position, ArrayList<String> route, String road) {
+    public Train(String name, Cords position, ArrayList<String> route, Road road) {
         this.name = name;
         this.destinationIndex = 0;
         this.position = position;
@@ -26,41 +27,33 @@ public class Train {
     }
 
     // Змінна пункту призначення
-    void NextDestination() { // Потяг досяг станції, тому змінюємо індекс на
+    void nextDestination() { // Потяг досяг станції, тому змінюємо індекс на
         // наступний в маршруті
         this.destinationIndex++;
         if (this.destinationIndex == 4) this.destinationIndex = 0;
     }
 
     // Рух потяга
-    void Move(ArrayList<Road> rs, ArrayList<Station> ss, Switch p) { // Рух потягу
+    void move(ArrayList<Station> ss, Switch p) { // Рух потягу
         if (this.action) { // Якщо потяг рухається
             // Пересування по дорозі
-            for (Road r : rs) {
-                if (this.road == r.name) { // Якщо потяг на цій дорозі
-                    this.position = r.trainMove(this.route.get(this.destinationIndex));
-                    // out: перемальовує потяг на інше місце
-                    // out: змінює стан потяга на “рух (координати)”
-                }
-            }
+            this.position = road.trainMove(this.route.get(this.destinationIndex));
+            // out: змінює стан потяга на “рух (координати)”
+
             // Перевірка зі станцією
             for (Station s : ss) {
-                if (ComparePositions(this.position, s.position)) {
+                if (Cords.compare(this.position, s.position)) {
                     this.action = false;
                     // Знімає з дороги потяг
-                    for (Road r : rs)
-                        for (String t : r.trains)
-                            if (t == this.name) // якщо потяг, прибувши
-                            {        // на станцію був на цій дорозі
-                                r.trains.remove(t); // з ArrayList<String> trains
-                                break;    // прибираємо даний потяг
-                            }
+                    road.trains.remove(this);
+                    // Потяг на станції
+                    this.road = null;
+                    this.station = s;
                     // out: змінює стан потяга на “випускає пасажирів”
-                    this.road = s.name; // Потяг на станції
                     break;
                 }
                 // Якщо потяг на перемикачі
-                if (ComparePositions(this.position, p.position)) {
+                if (Cords.compare(this.position, p.position)) {
                     // Знімає з дороги потяг
                     for (Road r : rs)
                         for (String t : r.trains)
@@ -90,19 +83,19 @@ public class Train {
     }
 
     // Перевірка шлагбаума
-    void CheckBarriers(ArrayList<Barrier> bs) { // Потяг перед/після шлагбаума
+    void checkBarriers(ArrayList<Barrier> bs) { // Потяг перед/після шлагбаума
         for (Barrier b : bs) {
-            if ((ComparePositions(this.position, b.position.get(0))) || (ComparePositions(this.position, b.position.get(1))))
+            if ((Cords.compare(this.position, b.position.get(0))) || (Cords.compare(this.position, b.position.get(1))))
                 b.changeStage();
         }
     }
 
     // Перевірка світлофору
-    void CheckLights(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
+    void checkLights(ArrayList<Light> ls, Switch p, ArrayList<Road> rs) {
         // Потяг на світлофорі
         for (Light l : ls) {
             // Якщо потяг на клітинці зі світлофором
-            if (ComparePositions(this.position, l.position)) {
+            if (Cords.compare(this.position, l.position)) {
                 if (!l.enable) { // Червоний
                     this.action = false;
                     //out: змінює стан потяга на “стоїть на світлофорі”

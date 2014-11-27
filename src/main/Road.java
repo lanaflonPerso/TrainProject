@@ -8,31 +8,27 @@ import java.util.List;
  */
 public class Road {
     String name; // Ім’я дороги
-    ArrayList<String> ends; // Імена станцій/перемикача на кінцях дороги
+    // Імена станцій/перемикача на кінцях дороги
+    String start;
+    String end;
     ArrayList<Cords> way; // Перелік всіх координат дороги
     ArrayList<String> trains; // Імена поїздів, які зараз на цій дорозі
 
-    public Road(String name, List<String> ends, List<Cords> way) {
-
-        this.ends = new ArrayList<String>();
+    public Road(String name, String start, String end, List<Cords> way) {
+        this.name = name;
+        this.start = start;
+        this.end = end;
         this.way = new ArrayList<Cords>();
         this.trains = new ArrayList<String>();
 
-        this.name = name;
-
-        for (String e : ends) {
-            this.ends.add(e);
-        }
         for (Cords w : way) {
             this.way.add(w);
         }
     }
 
-	/* Якщо треба прописати функції AddWay, AddEnd, AddTrain, якщо в джаві не передбачені Add-и та RemoveTrain, якщо не передбачено trains.Remove */
-
     boolean trainsEmpty() {
         // Перевірка наявності елементів в this.trains
-        return (trains.size() == 0);
+        return (trains.size() == 0) ? true : false;
     }
 
     // Рух потяга
@@ -40,13 +36,13 @@ public class Road {
         int i = 0;
         for (Cords xy : this.way) {
             i++;
-            /*if (ComparePositions(way, xy)) {
-                if (this.ends.get(0).equals(destination))
+            if (Cords.compare(way, xy)) {
+                if (start.equals(destination))
                     return this.way.get(i--);
-                else if (this.ends.get(1).equals(destination))
+                else if (end.equals(destination))
                     return this.way.get(i++);
                 else return null; // треба опрацювати варіант false
-            }*/
+            }
         }
         return null;
     }
