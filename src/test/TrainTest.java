@@ -30,8 +30,8 @@ public class TrainTest {
     public void init() {
         // ініціація потягів
         t1 = new Train("T1", new Cords(1,14));
-        t2 = new Train("T1", new Cords(3,1));
-        t3 = new Train("T1", new Cords(17,12));
+        t2 = new Train("T2", new Cords(3,1));
+        t3 = new Train("T3", new Cords(17,12));
         trains = new Train[]{t1, t2, t3};
 
         // ініціація станцій
@@ -92,7 +92,7 @@ public class TrainTest {
         roads = new Road[]{r12, r13, r1p, r2p, r3p};
 
         // задаємо маршрути для кожного потяга
-        t1.route = new Station[] {s2, s3, s1, s3};
+        t1.route = new Station[] {s2, s1, s2, s1};
         t2.route = new Station[] {s1, s2, s3, s2};
         t3.route = new Station[] {s3, s1, s2, s1};
         // задаємо дорогу для потягів
@@ -185,18 +185,26 @@ public class TrainTest {
 
     @Test
     public void cycleTest() {
+        for (Station s : stations) { // для кожної станції
+            System.out.println(s + " storage: ");
+           for(Train t : s.storage) {
+               System.out.print(t + "; ");
+           }
+            System.out.println();
+        }
         while(true) {
             t1.move();
             t1.checkLights();
             t1.checkBarriers();
 
+            System.out.println(t1.position);
+            System.out.println(t1.location);
+
             for  (Station s : stations) { // для кожної станції
                 s.checkStorage();
                 s.checkNew();
+                System.out.println(s + " size: " + s.storageSize);
             }
-
-            System.out.println(t1.position);
-            System.out.println(t1.location);
 
             try {
                 Thread.sleep(700);

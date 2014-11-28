@@ -20,7 +20,7 @@ public class Train {
         for (Station r : route) {
             this.route[i++] = r;
         }
-        this.action = true;
+        this.action = false;
         // out: малює потяг
         // out: відображення стану “ набирає пасажирів ”
     }

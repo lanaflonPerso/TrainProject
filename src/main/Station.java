@@ -1,16 +1,13 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 /**
  * Станції
  */
 public class Station implements Location {
     String name; // Ім’я станції
     Cords position; // Координати розміщення станції
-    Train[] storage; // Перелік потягів на станції
-    int storageSize; // Кількість потягів на станції
+    public Train[] storage; // Перелік потягів на станції
+    public int storageSize; // Кількість потягів на станції
 
     public Station(String name, Cords position, Train[] trains){
         this.name = name;
@@ -21,6 +18,7 @@ public class Station implements Location {
         for(Train t : trains) {
             this.storage[i++] = t;
         }
+        storageSize = i;
         // out: відображення стану "готує до відправки"
     }
 
@@ -42,25 +40,29 @@ public class Station implements Location {
     public void trainArrived(Train train) {
         System.out.println("=========== Arrived " + train);
         // out: міняє стан на "Приймає потяг T"
-        this.storage.add(train);
+        storage[storageSize++] = train;
         train.setNextDestination();
     }
 
     // Підготовка до відправлення потяга
     public void checkStorage() {
-//        System.out.println("======" + this + "STORAGE: " + storage.size());
         if (!this.storageEmpty()) { // якщо є потяги на станції
-            for (Iterator<Train> it = storage.iterator(); it.hasNext(); ) {
+            for (int i = 0; i < storageSize; i++) {
+                System.out.println("*** " + this + ": " + storage[i]);
+                Train t = storage[i];
                 // перевірка маршруту
-                Train t = it.next();
                 Road currentRoad = checkRoads(t.getNextDestination());
                 if (currentRoad != null) {
-                    this.storage.remove(t); // виїжджає зі станції
+                    // виїжджає зі станції
+                    storage[i] = null;
+                    storageSize--;
+                    System.out.println(t + " deleted from " + this);
+
                     t.location = currentRoad; // ставить потяг на дорогу
                     t.action = true;
                     System.out.println("CHAAAAAAAAAAAAAAAAANGED!");
                 } else {
-                    // out: стан станції "потяг затримується"
+                    // out: стан станції "потяг затримується" з відправкою
                 }
             }
         } else {
@@ -68,22 +70,15 @@ public class Station implements Location {
         }
     }
 
-    // Перевірка маршруту
- /* S1↔S2:
-	R12
-	R2p i R1p
-	S1↔S3:
-	R13
-	R2p i R3p
-    S2↔S3:
-	R2p i R3p */
+ /* S1↔S2: R12; R2p i R1p
+	S1↔S3:	R13; R2p i R3p
+    S2↔S3:	R2p i R3p */
 
     /**
      * @return дорога, потрібна для руху потяга, або null, якщо дороги зайняті
      */
     Road checkRoads(Station stationTo) {
         // S1↔S2
-        System.out.println("Lalka, go away!!!!!!!");
         if ((this == Core.s1)&&(stationTo == Core.s2) || (this == Core.s2)&&(stationTo == Core.s1)) {
             return getRoad(Core.r12, Core.r1p, Core.r2p, stationTo);
         } else if((this == Core.s1)&&(stationTo == Core.s3) || (this == Core.s3)&&(stationTo == Core.s1)) { // S1↔S3
@@ -95,7 +90,8 @@ public class Station implements Location {
 
     private boolean isInStorage(Train t) {
         for(Train storageT : storage) {
-            if (storageT.equals(t))
+            System.out.println(storageT);
+            if (t.equals(storageT))
                 return true;
         }
         return false;
@@ -106,7 +102,6 @@ public class Station implements Location {
      * @param stationTo на яку станцію прямує потяг
      * @return null – дороги зайняті
      */
-// CORE_1____________!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private Road getRoad(Road rHead, Road r1p, Road r2p, Station stationTo) {
         if (rHead != null && !rHead.isEmpty()) { // Якщо головна дорога не пуста
             for (Train t : Core.getTrainsOnRoad(rHead)) {
