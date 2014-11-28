@@ -10,8 +10,7 @@ public class Barrier {
     public Barrier(String name, ArrayList<Cords> position){
         this.name = name;
         this.enable = true;
-        position = new ArrayList<Cords>();
-        for(Cords p : position) { this.position.add(p);}
+        this.position = position;
         // out: малює відкритий шлагбаум і стан “відкритий”
     }
 

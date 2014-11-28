@@ -1,7 +1,7 @@
 package test;
 
 import main.*;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,19 +20,25 @@ public class TrainTest {
     static Light l1, l2, l3;
     static Road r12, r13, r1p, r2p, r3p;
 
-    @BeforeClass
-    public static void init() {
+    static Train[] trains;
+    static Station[] stations;
+    static Road[] roads;
+    public Barrier[] barriers;
+    static Light[] ligts;
+
+    @Before
+    public void init() {
         // ініціація потягів
         t1 = new Train("T1", new Cords(1,14));
         t2 = new Train("T1", new Cords(3,1));
         t3 = new Train("T1", new Cords(17,12));
-        Train[] trains = new Train[]{t1, t2, t3};
+        trains = new Train[]{t1, t2, t3};
 
         // ініціація станцій
         s1 = new Station("S1", new Cords(3,1), new Train[]{t2});
         s2 = new Station("S2", new Cords(1,14), new Train[]{t1});
         s3 = new Station("S3", new Cords(17,11), new Train[]{t3});
-        Station[] stations = new Station[]{s1, s2, s3};
+        stations = new Station[]{s1, s2, s3};
 
         // ініціація перемикача
         p = new Switch("P", new Cords(8,11));
@@ -83,7 +89,7 @@ public class TrainTest {
         ArrayList<Cords> cr5 = new ArrayList<Cords>(Arrays.asList(crArr));
         r3p = new Road("R3p", s3, p, cr5);
 
-        Road[] roads = new Road[]{r12, r13, r1p, r2p, r3p};
+        roads = new Road[]{r12, r13, r1p, r2p, r3p};
 
         // задаємо маршрути для кожного потяга
         t1.route = new Station[] {s2, s3, s1, s3};
@@ -105,20 +111,20 @@ public class TrainTest {
         cb1.add(new Cords(8, 1));
         cb1.add(new Cords(10, 1));
         b2 = new Barrier("B2", cb1);
-        Barrier[] barriers = new Barrier[] {b1, b2};
+        barriers = new Barrier[] {b1, b2};
 
         // ініціація світлофорів
         l1 = new Light("L1", new Cords(8,10));
         l2 = new Light("L2", new Cords(7,11));
         l3 = new Light("L3", new Cords(9,11));
-        Light[] ligts = new Light[] {l1, l2, l3};
+        ligts = new Light[] {l1, l2, l3};
 
         coreInit();
         // запуск системи
 //        Main(S, R, B, L, P, T);
     }
 
-    public static void coreInit() {
+    public void coreInit() {
         Core.t1 = t1;
         Core.t2 = t2;
         Core.t3 = t3;
@@ -145,8 +151,6 @@ public class TrainTest {
 
     @Test
     public void startRunning() {
-        t1.position = new Cords(1,14);
-
         assertEquals(new Cords(1,14), t1.position);
         assertEquals(t1.location, r2p);
         assertEquals(t1.getLastDestination(), s2);
@@ -157,8 +161,9 @@ public class TrainTest {
     }
 
     @Test
-    public void stationChangeRoad() {
+    public void changeRoad() {
         t1.position = new Cords(1,14);
+        assertEquals(r2p, t1.location);
 
         t1.move();
         t1.move();
@@ -171,9 +176,33 @@ public class TrainTest {
         t1.move();
         t1.move();
         t1.checkLights();
-        System.out.println(t1.action);
-//        t1.move();
+        t1.move();
+        t1.move();
+        t1.move();
+        System.out.println(t1.location);
+        assertEquals(r3p, t1.location);
+    }
 
-//        for (Station )
+    @Test
+    public void cycleTest() {
+        while(true) {
+            t1.move();
+            t1.checkLights();
+            t1.checkBarriers();
+
+            for  (Station s : stations) { // для кожної станції
+                s.checkStorage();
+                s.checkNew();
+            }
+
+            System.out.println(t1.position);
+            System.out.println(t1.location);
+
+            try {
+                Thread.sleep(700);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -33,13 +33,13 @@ public class Core {
         return new Light[] {l1, l2, l3};
     }
 
-    public static Train[] getTrainsOnRoad(Road r) {
+    public static ArrayList<Train> getTrainsOnRoad(Road r) {
         ArrayList<Train> ts = new ArrayList<Train>(3);
         for(Train t : getAllT()) {
             if (t.location.equals(r)) {
                 ts.add(t);
             }
         }
-        return (Train[])ts.toArray();
+        return ts;
     }
 }

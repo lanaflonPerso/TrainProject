@@ -33,14 +33,13 @@ public class Train {
     }
 
     // Рух потяга
-    public void move() { // Рух потягу
+    public void move() {
         Station[] ss = Core.getAllS();
         Switch p = Core.p;
         if (this.action) { // Якщо потяг рухається
             // Пересування по дорозі
             Road road = (Road)location;
             int currentRoadIndex = road.way.indexOf(position);
-//            System.out.println(road.way);
             // the next coordinate depends on direction of train
             int nextRoadIndex;
             if (!(road.end instanceof Switch)) {
@@ -71,15 +70,12 @@ public class Train {
             // Якщо потяг на перемикачі
             if (Cords.compare(this.position, p.position)) {
                 // Ставить потяг на наступну дорогу
-                if (getLastDestination() == ss[0]) { // s1
-                    // this.road = "R1p";
-//                    NEED ROAD OBJECT
-                } else if (getLastDestination() == ss[0]) { // s2
-                    // this.road = "R2p";
-//                    NEED ROAD OBJECT
+                if (getNextDestination() == Core.s1) { // s1
+                    this.location = Core.r1p;
+                } else if (getNextDestination() == Core.s2) { // s2
+                    this.location = Core.r2p;
                 } else { // s3
-                    // this.road = "R3p";
-//                    NEED ROAD OBJECT
+                    this.location = Core.r3p;
                 }
             } else if (this.location instanceof Station) { // Якщо потяг стоїть на станції
                 // out: змінює стан потяга на "набирає пасажирів"
@@ -126,55 +122,60 @@ public class Train {
 
     // Перемикається перемикач
     public void switchSystem() {
-        Light[] ls = Core.getAllL();
-        Road[] rs  = Core.getAllR();
         Switch p   = Core.p;
         // Ініціює масив для визначення світлофора, який включить червоний
-        ArrayList<String> redLights = new ArrayList<String>();
-        redLights.add("L1");
-        redLights.add("L2");
-        redLights.add("L3");
+        ArrayList<Light> redLights = new ArrayList<Light>();
+        redLights.add(Core.l1);
+        redLights.add(Core.l2);
+        redLights.add(Core.l3);
         Road road = (Road)location;
         // Визначає звідкіля їде потяг
-        if (road == rs[2]) { // Rs[“R1p”]
-            p.direction.set(0, Core.s1);
-            redLights.remove("L1");
-        } else if (road == rs[3]) { // Rs[“R2p”]
-            p.direction.set(0, Core.s2);
-            redLights.remove("L2");
+        Light lFirst;
+        if (road == Core.r1p) {
+            lFirst = Core.l1;
+        } else if(road == Core.r2p) {
+            lFirst = Core.l2;
         } else { // Rs[“R3p”]
-            p.direction.set(0, Core.s3);
-            redLights.remove("L3");
+            lFirst = Core.l3;
         }
-        // Визначає куди їде потяг
         p.direction.set(1, getLastDestination());
+        redLights.remove(lFirst);
+        // Визначає куди їде потяг
+        p.direction.set(1, getNextDestination());
         // Виключає зі списку визначення світлофору з червоним кольором
-        if (p.direction.get(1) == Core.r1p) { // Rs[“R1p”]
-            redLights.remove("L1");
-        } else if (p.direction.get(1) == Core.r2p) { // Rs[“R2p”]
-            redLights.remove("L2");
-        } else { // Rs[“R3p”]
-            redLights.remove("L3");
+        if (getNextDestination() == Core.s1) {
+            redLights.remove(Core.l1);
+        } else if (getNextDestination() == Core.s2) {
+            redLights.remove(Core.l2);
+        } else { // s3
+            redLights.remove(Core.l3);
         }
         // out: перемикач змінює стан на “i↔j” та перемальовується
         // Один світлофор стає червоним
-        for (String redlights : redLights) {
-            for (Light l : ls) {
-                if (redlights == l.name) {
-                    l.enable = false;
-                    // out: змінює стан світлофора l на “червоний”
-                    // out: світлофора l на мапі червоним кольором
-                }
-            }
+        for (Light l : redLights) {
+            l.enable = false;
+            // out: змінює стан світлофора l на “червоний”
+            // out: світлофора l на мапі червоним кольором
         }
     }
 
+    /**
+     * Повертає останню станцію, де був потяг
+     */
     public Station getLastDestination() {
         return this.route[destinationIndex];
     }
 
+    /**
+     * Повертає наступну станцію, куди прямує потяг
+     */
     public Station getNextDestination() {
         int index = (destinationIndex == 4) ? 0 : destinationIndex+1;
         return this.route[index];
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
