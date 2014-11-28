@@ -17,17 +17,20 @@ public class Station implements Location {
         int i = 0;
         for(Train t : trains) {
             this.storage[i++] = t;
+            // out: відображення стану "готує до відправки"
+            System.out.println(this + " готує до відправки " + t);
         }
         storageSize = i;
-        // out: відображення стану "готує до відправки"
     }
 
     boolean storageEmpty() {
         return (storageSize == 0) ? true : false;
     }
 
-    // Перевірка приїзду потяга
-    public void checkNew() {
+    /**
+     * Перевірка приїзду потяга
+     */
+    public void checkNewTrains() {
         for(Train t : Core.getAllT()) {
             if ((Cords.compare(this.position, t.position)) // якщо потяг на станції
                     &&(!isInStorage(t))) { // якщо потяг ще не доданий у склад
@@ -36,33 +39,43 @@ public class Station implements Location {
         }
     }
 
-    // Запис про приїзд потяга
-    public void trainArrived(Train train) {
-        System.out.println("=========== Arrived " + train);
-        // out: міняє стан на "Приймає потяг T"
-        storage[storageSize++] = train;
-        train.setNextDestination();
+    /**
+     * Запис про приїзд потяга
+     */
+    public void trainArrived(Train t) {
+        // out:  "Приймає потяг T" - стан станції
+        // out:  “випускає пасажирів” - стан потяга
+        System.out.println(this + " приймає потяг " + t);
+        System.out.println(t + " випускає пасажирів на " + this);
+        storage[storageSize++] = t;
+        t.setNextDestination();
+        if (t.location == null) { // просто костиль
+            t.destinationIndex--;
+        }
     }
 
-    // Підготовка до відправлення потяга
-    public void checkStorage() {
+    /**
+     * Підготовка до відправлення потяга
+     */
+    public void releaseTrainsFromStorage() {
         if (!this.storageEmpty()) { // якщо є потяги на станції
             for (int i = 0; i < storageSize; i++) {
-                System.out.println("*** " + this + ": " + storage[i]);
                 Train t = storage[i];
                 // перевірка маршруту
-                Road currentRoad = checkRoads(t.getNextDestination());
-                if (currentRoad != null) {
-                    // виїжджає зі станції
+                Road nextRoad = checkRoads(t.getNextDestination());
+                if (nextRoad != null) {
+                    // дозволяє при наступній ітерації випустити потяг
                     storage[i] = null;
                     storageSize--;
-                    System.out.println(t + " deleted from " + this);
+                    // out: потяг набирає пасажирів
+                    System.out.println(t + " набирає пасажирів на " + this);
 
-                    t.location = currentRoad; // ставить потяг на дорогу
+                    t.location = nextRoad; // ставить потяг на дорогу
                     t.action = true;
-                    System.out.println("CHAAAAAAAAAAAAAAAAANGED!");
+                    System.out.println("ROAD CHANGED TO " + nextRoad);
                 } else {
-                    // out: стан станції "потяг затримується" з відправкою
+                    // out: стан станції "потяг затримується з відправкою"
+                    System.out.println(t + " затримується з відправкою");
                 }
             }
         } else {
@@ -88,9 +101,12 @@ public class Station implements Location {
         }
     }
 
+    /**
+     * Перевірка чи знаходиться потяг на станції
+     * @param t потяг
+     */
     private boolean isInStorage(Train t) {
         for(Train storageT : storage) {
-            System.out.println(storageT);
             if (t.equals(storageT))
                 return true;
         }
@@ -109,7 +125,7 @@ public class Station implements Location {
                 if (t.getNextDestination() == stationTo)
                     return rHead;
             }
-        } else {
+        } else if (rHead != null) {
             return rHead; // головна дорога
         }
         // Якщо вільні дві допоміжних дороги

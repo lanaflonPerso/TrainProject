@@ -30,14 +30,20 @@ public class TrainTest {
     public void init() {
         // ініціація потягів
         t1 = new Train("T1", new Cords(1,14));
-        t2 = new Train("T2", new Cords(3,1));
-        t3 = new Train("T3", new Cords(17,12));
-        trains = new Train[]{t1, t2, t3};
+//        t2 = new Train("T2", new Cords(3,1));
+//        t3 = new Train("T3", new Cords(17,12));
+        trains = new Train[]{t1};
+//        trains = new Train[]{t1, t2, t3};
 
         // ініціація станцій
-        s1 = new Station("S1", new Cords(3,1), new Train[]{t2});
-        s2 = new Station("S2", new Cords(1,14), new Train[]{t1});
-        s3 = new Station("S3", new Cords(17,11), new Train[]{t3});
+//        s1 = new Station("S1", new Cords(3,1), new Train[]{t2});
+//        s2 = new Station("S2", new Cords(1,14), new Train[]{t1});
+//        s3 = new Station("S3", new Cords(17,11), new Train[]{t3});
+//
+        s1 = new Station("S1", new Cords(3,1), new Train[]{});
+        s2 = new Station("S2", new Cords(1,14), new Train[]{});
+        s3 = new Station("S3", new Cords(17,11), new Train[]{});
+
         stations = new Station[]{s1, s2, s3};
 
         // ініціація перемикача
@@ -92,13 +98,13 @@ public class TrainTest {
         roads = new Road[]{r12, r13, r1p, r2p, r3p};
 
         // задаємо маршрути для кожного потяга
-        t1.route = new Station[] {s2, s1, s2, s1};
-        t2.route = new Station[] {s1, s2, s3, s2};
-        t3.route = new Station[] {s3, s1, s2, s1};
+        t1.route = new Station[] {s2, s3, s1, s3};
+//        t2.route = new Station[] {s1, s2, s3, s2};
+//        t3.route = new Station[] {s3, s1, s2, s1};
         // задаємо дорогу для потягів
-        t1.location = r2p;
-        t2.location = r12;
-        t3.location = r13;
+//        t1.location = r2p;
+//        t2.location = r12;
+//        t3.location = r13;
 
         // ініціація шлагбаумів
         // Barrier 1
@@ -149,7 +155,7 @@ public class TrainTest {
         Core.p = p;
     }
 
-    @Test
+//    @Test
     public void startRunning() {
         assertEquals(new Cords(1,14), t1.position);
         assertEquals(t1.location, r2p);
@@ -160,7 +166,7 @@ public class TrainTest {
         System.out.println(t1.position);
     }
 
-    @Test
+//    @Test
     public void changeRoad() {
         t1.position = new Cords(1,14);
         assertEquals(r2p, t1.location);
@@ -185,25 +191,29 @@ public class TrainTest {
 
     @Test
     public void cycleTest() {
-        for (Station s : stations) { // для кожної станції
-            System.out.println(s + " storage: ");
-           for(Train t : s.storage) {
-               System.out.print(t + "; ");
-           }
-            System.out.println();
-        }
         while(true) {
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+            for (Station s : stations) { // для кожної станції
+                System.out.print(s + " storage: ");
+                for(Train t : s.storage) {
+                    System.out.print(t + "; ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+
+            System.out.println(t1 + ": " + t1.position + "; " + t1.location);
+            System.out.println("Остання станція: " + t1.getLastDestination() + "; наступна: " + t1.getNextDestination() + "; індекс: " + t1.destinationIndex);
+            System.out.println();
+
             t1.move();
             t1.checkLights();
             t1.checkBarriers();
 
-            System.out.println(t1.position);
-            System.out.println(t1.location);
-
             for  (Station s : stations) { // для кожної станції
-                s.checkStorage();
-                s.checkNew();
-                System.out.println(s + " size: " + s.storageSize);
+                s.releaseTrainsFromStorage();
+                s.checkNewTrains();
             }
 
             try {

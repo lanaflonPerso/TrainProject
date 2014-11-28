@@ -18,7 +18,8 @@ public class Core {
     }
 
     public static Train[] getAllT() {
-        return new Train[] {t1, t2, t3};
+// NEED TO BE UNCOMMENTED       return new Train[] {t1, t2, t3};
+        return new Train[] {t1};
     }
 
     public static Road[] getAllR() {
@@ -36,7 +37,7 @@ public class Core {
     public static ArrayList<Train> getTrainsOnRoad(Road r) {
         ArrayList<Train> ts = new ArrayList<Train>(3);
         for(Train t : getAllT()) {
-            if (t.location.equals(r)) {
+            if (r.equals(t.location)) {
                 ts.add(t);
             }
         }

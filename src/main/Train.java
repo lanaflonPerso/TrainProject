@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Train {
     String name; // Ім’я потяга
-    int destinationIndex; //Індекс маршруту, що відображає пункт призначення
+    public int destinationIndex; //Індекс маршруту, що відображає пункт призначення
     public Station[] route; // Маршрут -> route[destinationIndex] – поточний пункт
     public Cords position; // Поточні координати розміщення потяга
     public boolean action; // Чи рухається?
@@ -23,6 +23,7 @@ public class Train {
         this.action = false;
         // out: малює потяг
         // out: відображення стану “ набирає пасажирів ”
+        System.out.println(this + " набирає пасажирів");
     }
 
     // Змінна пункту призначення
@@ -63,7 +64,6 @@ public class Train {
                     this.action = false;
                     // Потяг на станції
                     this.location = s;
-                    // out: змінює стан потяга на “випускає пасажирів”
                     break;
                 }
             }
@@ -77,8 +77,6 @@ public class Train {
                 } else { // s3
                     this.location = Core.r3p;
                 }
-            } else if (this.location instanceof Station) { // Якщо потяг стоїть на станції
-                // out: змінює стан потяга на "набирає пасажирів"
             }
         }
     }
