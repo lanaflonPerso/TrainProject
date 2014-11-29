@@ -26,7 +26,9 @@ public class Train {
         System.out.println(this + " набирає пасажирів");
     }
 
-    // Рух потяга
+    /**
+     * Рух потяга
+     */
     public void move() {
         Station[] ss = Core.getAllS();
         Switch p = Core.p;
@@ -74,7 +76,9 @@ public class Train {
         }
     }
 
-    // Перевірка шлагбаума
+    /**
+     * Перевірка шлагбаума
+     */
     public void checkBarriers() { // Потяг перед/після шлагбаума
         Barrier[] bs = Core.getAllB();
         for (Barrier b : bs) {
@@ -83,7 +87,9 @@ public class Train {
         }
     }
 
-    // Перевірка світлофору
+    /**
+     * Перевірка світлофора
+     */
     public void checkLights() {
         Light[] ls = Core.getAllL();
         // Потяг на світлофорі
@@ -111,7 +117,9 @@ public class Train {
         }
     }
 
-    // Перемикається перемикач
+    /**
+     * Перемикається перемикач
+     */
     public void switchSystem() {
         Switch p   = Core.p;
         // Ініціює масив для визначення світлофора, який включить червоний
@@ -153,10 +161,10 @@ public class Train {
     /**
      * Змінна пункту призначення
      */
-    public void setNextDestination() { // Потяг досяг станції, тому змінюємо індекс на
+    public void setNextDestination() {
+        // Потяг досяг станції, тому змінюємо індекс на
         // наступний в маршруті
-        this.destinationIndex++;
-        if (this.destinationIndex == 4) this.destinationIndex = 0;
+        if (this.destinationIndex++ == 4) this.destinationIndex = 0; // циклічний рух потяга по заданому маршруту
     }
 
     /**
