@@ -192,6 +192,7 @@ public class TrainTest {
     @Test
     public void cycleTest() {
         while(true) {
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
             t1.move();
             t1.checkLights();
             t1.checkBarriers();
@@ -212,7 +213,9 @@ public class TrainTest {
     }
 
     private void consolePrint() {
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println(t1 + ": " + t1.position + "; " + t1.location);
+        System.out.println("Остання станція: " + t1.getLastDestination() + "; наступна: " + t1.getNextDestination() + "; індекс: " + t1.destinationIndex);
+        System.out.println();
         for (Station s : stations) { // для кожної станції
             System.out.print(s + " storage: ");
             for(Train t : s.storage) {
@@ -221,13 +224,8 @@ public class TrainTest {
             System.out.println();
         }
         System.out.println();
-        System.out.println(t1 + ": " + t1.position + "; " + t1.location);
-        System.out.println("Остання станція: " + t1.getLastDestination() + "; наступна: " + t1.getNextDestination() + "; індекс: " + t1.destinationIndex);
-        System.out.println();
-        System.out.println("===================================");
         for (Light l : Core.getAllL()) {
-            l.enable = false;
-            System.out.println(l + ".enable=" + l.enable);
+            System.out.println(l + ": " + l.enable);
             // out: змінює стан світлофора l на “червоний”
             // out: світлофора l на мапі червоним кольором
         }
