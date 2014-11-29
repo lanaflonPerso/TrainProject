@@ -19,11 +19,7 @@ public class Core {
 
     public static Train[] getAllT() {
 // NEED TO BE UNCOMMENTED       return new Train[] {t1, t2, t3};
-        return new Train[] {t1};
-    }
-
-    public static Road[] getAllR() {
-        return new Road[] {r12, r13, r1p, r2p, r3p};
+        return new Train[] {t1, t2};
     }
 
     public static Barrier[] getAllB() {

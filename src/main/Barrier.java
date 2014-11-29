@@ -17,6 +17,12 @@ public class Barrier {
     // Змінна стану шлагбаума
     public void changeStage() {
         this.enable = !this.enable;
+        System.out.println(this + " змінив стан на " + enable);
         // out: змінює стан шлагбаума та перемальовує
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

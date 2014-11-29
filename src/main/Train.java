@@ -1,7 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-
 public class Train {
     String name; // Ім’я потяга
     public int destinationIndex; //Індекс маршруту, що відображає пункт призначення
@@ -94,68 +92,54 @@ public class Train {
         Light[] ls = Core.getAllL();
         // Потяг на світлофорі
         for (Light l : ls) {
-            // Якщо потяг на клітинці зі світлофором
-            if (Cords.compare(this.position, l.position)) {
+            // якщо потяг на клітинці зі світлофором (прибув до перемикача, а не відбуває)
+            if (Cords.compare(this.position, l.position) && l == getLightByStation(getLastDestination())) {
                 if (!l.enable) { // Червоний
-                    this.action = false;
-                    //out: змінює стан потяга на “стоїть на світлофорі”
+                    if (this.action == true) { // потяг тільки прибув
+                        this.action = false; // зупиняємо його на 1 ітерацію
+                        //out: змінює стан потяга на “стоїть на світлофорі”
+                    } else { // потяг вже постояв на світлофорі 1 ітерацію, відправляємо його
+                        switchSystem(); // перемикаємо перемикач
+                        // дозволяємо потягу рухатися на наступній ітерації
+                        this.action = true;
+                    }
                 } else { // Зелений
-                    if (this.action == false) { // Якщо стояв на світлофорі
-                        this.action = true; // Потяг має рухатись
-                        // out: змінює стан потяга на “рух (координати)”
-                    }
-                    // Включаються всі світлофори
-                    for (Light ll : ls) {
-                        l.enable = true;
-                        // out: змінює стан світлофора l на “зелений”
-                        // out: світлофора l на мапі зеленим кольором
-                    }
-                    // Перемикається перемикач
-                    this.switchSystem();
+
+                        switchSystem(); // перемикаємо перемикач тільки якщо потяг прибув до перемикача, а не відбуває
                 }
             }
         }
     }
 
     /**
+     * Беремо світлофор зі сторони вказаної станції
+     */
+    private Light getLightByStation(Station s) {
+        if (s == Core.s1)
+            return Core.l1;
+        if (s == Core.s2)
+            return Core.l2;
+        return Core.l3;
+    }
+
+    /**
      * Перемикається перемикач
      */
     public void switchSystem() {
-        Switch p   = Core.p;
-        // Ініціює масив для визначення світлофора, який включить червоний
-        ArrayList<Light> redLights = new ArrayList<Light>();
-        redLights.add(Core.l1);
-        redLights.add(Core.l2);
-        redLights.add(Core.l3);
-        Road road = (Road)location;
-        // Визначає звідкіля їде потяг
-        Light lFirst;
-        if (road == Core.r1p) {
-            lFirst = Core.l1;
-        } else if(road == Core.r2p) {
-            lFirst = Core.l2;
-        } else { // Rs[“R3p”]
-            lFirst = Core.l3;
+        Switch p = Core.p;
+        // оновлює світлофори, зеленими стають тільки світлофори зі сторін звідки і куди їде потяг
+        Light[] ls = Core.getAllL();
+        for (Light light : ls) {
+            if (light == getLightByStation(getLastDestination()) || light == getLightByStation(getNextDestination())) {
+                light.enable = true;
+            } else {
+                light.enable = false;
+            }
         }
-        p.direction.set(1, getLastDestination());
-        redLights.remove(lFirst);
-        // Визначає куди їде потяг
-        p.direction.set(1, getNextDestination());
-        // Виключає зі списку визначення світлофору з червоним кольором
-        if (getNextDestination() == Core.s1) {
-            redLights.remove(Core.l1);
-        } else if (getNextDestination() == Core.s2) {
-            redLights.remove(Core.l2);
-        } else { // s3
-            redLights.remove(Core.l3);
-        }
+        // оновлюємо стан перемикача
+        p.direction.set(0, getLastDestination()); // звідкіля їде потяг
+        p.direction.set(1, getNextDestination()); // куди їде потяг
         // out: перемикач змінює стан на “i↔j” та перемальовується
-        // Один світлофор стає червоним
-        for (Light l : redLights) {
-            l.enable = false;
-            // out: змінює стан світлофора l на “червоний”
-            // out: світлофора l на мапі червоним кольором
-        }
     }
 
     /**
@@ -164,7 +148,7 @@ public class Train {
     public void setNextDestination() {
         // Потяг досяг станції, тому змінюємо індекс на
         // наступний в маршруті
-        if (this.destinationIndex++ == 4) this.destinationIndex = 0; // циклічний рух потяга по заданому маршруту
+        if (++this.destinationIndex == 4) this.destinationIndex = 0; // циклічний рух потяга по заданому маршруту
     }
 
     /**

@@ -9,17 +9,12 @@ public class Station implements Location {
     public Train[] storage; // Перелік потягів на станції
     public int storageSize; // Кількість потягів на станції
 
-    public Station(String name, Cords position, Train[] trains){
+    public Station(String name, Cords position){
         this.name = name;
         this.position = position;
         storage = new Train[3];
         // ініціювання пустих this.storage
         int i = 0;
-        for(Train t : trains) {
-            this.storage[i++] = t;
-            // out: відображення стану "готує до відправки"
-            System.out.println(this + " готує до відправки " + t);
-        }
         storageSize = i;
     }
 

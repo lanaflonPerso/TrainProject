@@ -30,9 +30,9 @@ public class TrainTest {
     public void init() {
         // ініціація потягів
         t1 = new Train("T1", new Cords(1,14));
-//        t2 = new Train("T2", new Cords(3,1));
+        t2 = new Train("T2", new Cords(3,1));
 //        t3 = new Train("T3", new Cords(17,12));
-        trains = new Train[]{t1};
+        trains = new Train[]{t1, t2};
 //        trains = new Train[]{t1, t2, t3};
 
         // ініціація станцій
@@ -40,11 +40,16 @@ public class TrainTest {
 //        s2 = new Station("S2", new Cords(1,14), new Train[]{t1});
 //        s3 = new Station("S3", new Cords(17,11), new Train[]{t3});
 //
-        s1 = new Station("S1", new Cords(3,1), new Train[]{});
-        s2 = new Station("S2", new Cords(1,14), new Train[]{});
-        s3 = new Station("S3", new Cords(17,11), new Train[]{});
+        s1 = new Station("S1", new Cords(3,1));
+        s2 = new Station("S2", new Cords(1,14));
+        s3 = new Station("S3", new Cords(17,11));
 
         stations = new Station[]{s1, s2, s3};
+
+        // задаємо маршрути для кожного потяга
+        t1.route = new Station[] {s2, s3, s1, s3};
+        t2.route = new Station[] {s1, s2, s3, s2};
+//        t3.route = new Station[] {s3, s1, s2, s1};
 
         // ініціація перемикача
         p = new Switch("P", new Cords(8,11));
@@ -94,17 +99,7 @@ public class TrainTest {
         };
         ArrayList<Cords> cr5 = new ArrayList<Cords>(Arrays.asList(crArr));
         r3p = new Road("R3p", s3, p, cr5);
-
         roads = new Road[]{r12, r13, r1p, r2p, r3p};
-
-        // задаємо маршрути для кожного потяга
-        t1.route = new Station[] {s2, s3, s1, s3};
-//        t2.route = new Station[] {s1, s2, s3, s2};
-//        t3.route = new Station[] {s3, s1, s2, s1};
-        // задаємо дорогу для потягів
-//        t1.location = r2p;
-//        t2.location = r12;
-//        t3.location = r13;
 
         // ініціація шлагбаумів
         // Barrier 1
@@ -114,9 +109,9 @@ public class TrainTest {
         b1 = new Barrier("B1", cb1);
         // Barrier 2
         ArrayList<Cords> cb2 = new ArrayList<Cords>();
-        cb1.add(new Cords(8, 1));
-        cb1.add(new Cords(10, 1));
-        b2 = new Barrier("B2", cb1);
+        cb2.add(new Cords(8, 1));
+        cb2.add(new Cords(10, 1));
+        b2 = new Barrier("B2", cb2);
         barriers = new Barrier[] {b1, b2};
 
         // ініціація світлофорів
@@ -191,11 +186,14 @@ public class TrainTest {
 
     @Test
     public void cycleTest() {
+        Train[] ts = Core.getAllT();
         while(true) {
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            t1.move();
-            t1.checkLights();
-            t1.checkBarriers();
+            for (Train t : ts) {
+                t.move();
+                t.checkLights();
+                t.checkBarriers();
+            }
 
             for  (Station s : stations) { // для кожної станції
                 s.releaseTrainsFromStorage();
@@ -205,7 +203,7 @@ public class TrainTest {
             consolePrint();
 
             try {
-                Thread.sleep(700);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -213,9 +211,11 @@ public class TrainTest {
     }
 
     private void consolePrint() {
-        System.out.println(t1 + ": " + t1.position + "; " + t1.location);
-        System.out.println("Остання станція: " + t1.getLastDestination() + "; наступна: " + t1.getNextDestination() + "; індекс: " + t1.destinationIndex);
-        System.out.println();
+        for (Train t : Core.getAllT()) {
+            System.out.println(t + ": " + t.position + "; " + t.location);
+            System.out.println("Остання станція: " + t.getLastDestination() + "; наступна: " + t.getNextDestination() + "; індекс: " + t.destinationIndex);
+            System.out.println();
+        }
         for (Station s : stations) { // для кожної станції
             System.out.print(s + " storage: ");
             for(Train t : s.storage) {
@@ -225,9 +225,10 @@ public class TrainTest {
         }
         System.out.println();
         for (Light l : Core.getAllL()) {
-            System.out.println(l + ": " + l.enable);
+            System.out.print(l + " " + (l.enable ? "+" : "-") + " ");
             // out: змінює стан світлофора l на “червоний”
             // out: світлофора l на мапі червоним кольором
         }
+        System.out.println();
     }
 }
