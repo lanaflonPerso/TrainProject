@@ -29,7 +29,7 @@ public class Road implements Location {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     @Override
