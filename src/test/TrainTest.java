@@ -203,10 +203,6 @@ public class TrainTest {
             }
             System.out.println();
 
-            System.out.println(t1 + ": " + t1.position + "; " + t1.location);
-            System.out.println("Остання станція: " + t1.getLastDestination() + "; наступна: " + t1.getNextDestination() + "; індекс: " + t1.destinationIndex);
-            System.out.println();
-
             t1.move();
             t1.checkLights();
             t1.checkBarriers();
@@ -215,6 +211,10 @@ public class TrainTest {
                 s.releaseTrainsFromStorage();
                 s.checkNewTrains();
             }
+
+            System.out.println(t1 + ": " + t1.position + "; " + t1.location);
+            System.out.println("Остання станція: " + t1.getLastDestination() + "; наступна: " + t1.getNextDestination() + "; індекс: " + t1.destinationIndex);
+            System.out.println();
 
             try {
                 Thread.sleep(700);

@@ -32,8 +32,8 @@ public class Station implements Location {
      */
     public void checkNewTrains() {
         for(Train t : Core.getAllT()) {
-            if ((Cords.compare(this.position, t.position)) // якщо потяг на станції
-                    &&(!isInStorage(t))) { // якщо потяг ще не доданий у склад
+            if (Cords.compare(this.position, t.position) // якщо потяг на станції
+                    && !isInStorage(t) && !t.action) { // якщо потяг ще не доданий у склад (!t.action - не чіпати тих, які готові до відправки наступної ітерації)
                 this.trainArrived(t);
             }
         }
@@ -49,7 +49,7 @@ public class Station implements Location {
         System.out.println(t + " випускає пасажирів на " + this);
         storage[storageSize++] = t;
         t.setNextDestination();
-        if (t.location == null) { // просто костиль
+        if (t.location == null) { // костиль - не збільшувати індекс, якщо це етап ініціалізації
             t.destinationIndex--;
         }
     }
@@ -64,6 +64,7 @@ public class Station implements Location {
                 // перевірка маршруту
                 Road nextRoad = checkRoads(t.getNextDestination());
                 if (nextRoad != null) {
+                    System.out.println("Next dest = " + t.getNextDestination());
                     // дозволяє при наступній ітерації випустити потяг
                     storage[i] = null;
                     storageSize--;
@@ -127,6 +128,11 @@ public class Station implements Location {
             }
         } else if (rHead != null) {
             return rHead; // головна дорога
+        }
+        if (rHead != null) {
+            System.out.println("rHead: " + rHead.isEmpty());
+            System.out.println("r1p: " + r1p.isEmpty());
+            System.out.println("r2p: " + r2p.isEmpty());
         }
         // Якщо вільні дві допоміжних дороги
         if ((r1p.isEmpty())&&(r2p.isEmpty())) {

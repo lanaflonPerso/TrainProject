@@ -26,13 +26,6 @@ public class Train {
         System.out.println(this + " набирає пасажирів");
     }
 
-    // Змінна пункту призначення
-    public void setNextDestination() { // Потяг досяг станції, тому змінюємо індекс на
-        // наступний в маршруті
-        this.destinationIndex++;
-        if (this.destinationIndex == 4) this.destinationIndex = 0;
-    }
-
     // Рух потяга
     public void move() {
         Station[] ss = Core.getAllS();
@@ -155,6 +148,15 @@ public class Train {
             // out: змінює стан світлофора l на “червоний”
             // out: світлофора l на мапі червоним кольором
         }
+    }
+
+    /**
+     * Змінна пункту призначення
+     */
+    public void setNextDestination() { // Потяг досяг станції, тому змінюємо індекс на
+        // наступний в маршруті
+        this.destinationIndex++;
+        if (this.destinationIndex == 4) this.destinationIndex = 0;
     }
 
     /**
