@@ -170,7 +170,7 @@ public class Train {
      * Повертає наступну станцію, куди прямує потяг
      */
     public Station getNextDestination() {
-        int index = (destinationIndex == 4) ? 0 : destinationIndex+1;
+        int index = (destinationIndex == 3) ? 0 : destinationIndex+1;
         return this.route[index];
     }
 
