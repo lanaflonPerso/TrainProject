@@ -64,6 +64,10 @@ public class Application implements Runnable {
         for (Train t : Core.getAllT()) {
             mapPanel.add(t);
         }
+        for (Light l: Core.getAllL()) {
+            mapPanel.add(l);
+        }
+        mapPanel.add(Core.p);
 
         // main menu
         setMenuBar();

@@ -1,7 +1,10 @@
 package main;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 
 public class Train extends JPanel {
@@ -27,12 +30,14 @@ public class Train extends JPanel {
             this.route[i++] = r;
         }
         this.action = false;
-        this.image = new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\t" + id + ".png").getImage();
 
+        try {
+            this.image = ImageIO.read(new File("resources\\img\\t" + id + ".png"));
+        } catch (IOException ignored) {
+        }
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         this.setOpaque(false);
-        // out: малює потяг
     }
 
     /**
