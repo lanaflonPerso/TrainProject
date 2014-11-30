@@ -1,14 +1,11 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**
@@ -41,11 +38,8 @@ public class Application implements Runnable {
         mapPanel = new MapPanel(); // map
 
         // original icon
-        try {
-            Image img = ImageIO.read(new File("resources\\img\\ico.png"));
-            frame.setIconImage(img);
-        } catch (IOException ignored) {
-        }
+        Image img = new ImageIcon(getClass().getClassLoader().getResource("resources/img/ico.png")).getImage();
+        frame.setIconImage(img);
 
         running = false;
         thread =  new Thread(this, "Main Loop");
