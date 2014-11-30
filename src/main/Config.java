@@ -15,7 +15,8 @@ public class Config {
                 "Window.WIDTH", "Window.HEIGHT",
                 "Map.WIDTH", "Map.HEIGHT", "Map.PADDING_LEFT", "Map.PADDING_TOP",
                 "ElementsPanel.WIDTH", "ElementsPanel.PADDING_LEFT", "ElementsPanel.PADDING_LEFT", "ElementsPanel.PADDING_TOP",
-                "InterruptsPanel.HEIGHT", "InterruptsPanel.PADDING_LEFT", "InterruptsPanel.PADDING_TOP"
+                "InterruptsPanel.HEIGHT", "InterruptsPanel.PADDING_LEFT", "InterruptsPanel.PADDING_TOP",
+                "App.DELAY"
         };
         try {
             Properties prop = new Properties();

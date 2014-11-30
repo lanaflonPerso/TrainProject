@@ -67,6 +67,9 @@ public class Application implements Runnable {
         for (Light l: Core.getAllL()) {
             mapPanel.add(l);
         }
+        for (Barrier b: Core.getAllB()) {
+            mapPanel.add(b);
+        }
         mapPanel.add(Core.p);
 
         // main menu
@@ -184,7 +187,7 @@ public class Application implements Runnable {
             consolePrint();
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(prop.get("App.DELAY"));
             } catch (InterruptedException ignored) {
             }
 
@@ -204,12 +207,6 @@ public class Application implements Runnable {
                 System.out.print(t + "; ");
             }
             System.out.println();
-        }
-        System.out.println();
-        for (Light l : Core.getAllL()) {
-            System.out.print(l + " " + (l.enable ? "+" : "-") + "    ");
-            // out: змінює стан світлофора l на “червоний”
-            // out: світлофора l на мапі червоним кольором
         }
         System.out.println();
     }
