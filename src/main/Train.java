@@ -169,7 +169,7 @@ public class Train extends JPanel {
     public void setNextDestination() {
         // Потяг досяг станції, тому змінюємо індекс на
         // наступний в маршруті
-        if (++this.destinationIndex == 4) this.destinationIndex = 0; // циклічний рух потяга по заданому маршруту
+        if (++this.destinationIndex == this.route.length) this.destinationIndex = 0; // циклічний рух потяга по заданому маршруту
     }
 
     /**
@@ -183,7 +183,7 @@ public class Train extends JPanel {
      * Повертає наступну станцію, куди прямує потяг
      */
     public Station getNextDestination() {
-        int index = (destinationIndex == 3) ? 0 : destinationIndex+1;
+        int index = (destinationIndex == this.route.length-1) ? 0 : destinationIndex+1; // циклічний рух
         return this.route[index];
     }
 
