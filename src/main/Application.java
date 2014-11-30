@@ -1,15 +1,11 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**
@@ -24,11 +20,9 @@ public class Application implements Runnable {
 
     Thread thread;
     boolean running;
-
-    BufferedImage train1Image;
-    JMenu startButton;
-
     static Hashtable<String, Integer> prop;
+
+    JMenu startButton;
 
     public Application() {
         // get properties
@@ -74,15 +68,6 @@ public class Application implements Runnable {
 
         // main menu
         setMenuBar();
-
-        // Application.class.getClassLoader().getResource("test_train.png").getPath();
-        try {
-            train1Image = ImageIO.read(new File("resources\\img\\test_train.png"));
-        } catch (IOException e) {
-            System.out.println("Problem with train image file.");
-        } catch (NullPointerException e) {
-            System.out.println("Error. Invalid path to train image.");
-        }
 
         // elements
         elementsPanel.add(new JLabel("Test"));

@@ -53,21 +53,16 @@ public class Train extends JPanel {
             // the next coordinate depends on direction of train
             int nextRoadIndex;
             if (!(road.end instanceof Switch)) {
-                System.out.println("lil_1");
                 if (getNextDestination() == road.end)
                     nextRoadIndex = currentRoadIndex+1;
                 else
                     nextRoadIndex = currentRoadIndex-1;
             } else {
-                System.out.println("lil_2");
                 if (getNextDestination() == road.start)
                     nextRoadIndex = currentRoadIndex-1;
                 else
                     nextRoadIndex = currentRoadIndex+1;
             }
-            System.out.println(road);
-            System.out.println(this);
-            System.out.println(currentRoadIndex);
             position = road.way.get(nextRoadIndex);
             // out: змінює стан потяга на “рух (координати)”
             // repaint
