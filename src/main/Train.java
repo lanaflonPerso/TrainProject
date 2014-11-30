@@ -1,10 +1,7 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 
 public class Train extends JPanel {
@@ -33,10 +30,7 @@ public class Train extends JPanel {
         this.action = false;
         this.state = "на станції";
 
-        try {
-            this.image = ImageIO.read(new File("resources\\img\\t" + id + ".png"));
-        } catch (IOException ignored) {
-        }
+        this.image = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\t" + id + ".png")).getImage();
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         this.setOpaque(false);

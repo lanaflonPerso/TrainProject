@@ -14,7 +14,7 @@ public class MapPanel extends JPanel {
     Hashtable<String, Integer> properties;
 
     public MapPanel() {
-        mapImage = new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\map.png").getImage();
+        mapImage = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\map.png")).getImage();
         setOpaque(false);
         properties = Application.getProperties();
     }

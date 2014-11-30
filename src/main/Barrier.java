@@ -1,10 +1,7 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -38,10 +35,7 @@ public class Barrier extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         String state = (this.enable) ? "green" : "red";
-        try {
-            image = ImageIO.read(new File("resources\\img\\b" + id + "_" + state + ".png"));
-        } catch (IOException ignored) {
-        }
+        image = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\b" + id + "_" + state + ".png")).getImage();
         int posX = 0, posY = 0;
         if (this.id == 1) {
             posX = 23;

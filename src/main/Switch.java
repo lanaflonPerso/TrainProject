@@ -1,10 +1,7 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -27,12 +24,11 @@ public class Switch extends JPanel implements Location {
         direction.add(Core.s1);
         direction.add(Core.s2);
         // out: стан “1↔2”
-        try {
-            this.p12 = ImageIO.read(new File("resources\\img\\p_12.png"));
-            this.p13 = ImageIO.read(new File("resources\\img\\p_13.png"));
-            this.p23 = ImageIO.read(new File("resources\\img\\p_23.png"));
-        } catch (IOException ignored) {
-        }
+
+        this.p12 = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\p_12.png")).getImage();
+        this.p13 = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\p_13.png")).getImage();
+        this.p23 = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\p_23.png")).getImage();
+
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         this.setOpaque(false);

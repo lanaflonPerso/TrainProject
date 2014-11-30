@@ -1,10 +1,7 @@
 package main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**
@@ -24,11 +21,9 @@ public class Light extends JPanel {
         this.name = name;
         this.enable = true;
         this.position = position;
-        try {
-            this.imageGreen = ImageIO.read(new File("resources\\img\\l_green.png"));
-            this.imageRed = ImageIO.read(new File("resources\\img\\l_red.png"));
-        } catch (IOException ignored) {
-        }
+        imageGreen = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\l_green.png")).getImage();
+        imageRed = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\l_red.png")).getImage();
+
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         this.setOpaque(false);
