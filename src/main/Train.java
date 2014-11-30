@@ -30,7 +30,7 @@ public class Train extends JPanel {
         this.action = false;
         this.state = "на станції";
 
-        this.image = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\t" + id + ".png")).getImage();
+        this.image = new ImageIcon(getClass().getClassLoader().getResource("resources/img/t" + id + ".png")).getImage();
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         this.setOpaque(false);

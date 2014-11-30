@@ -1,10 +1,7 @@
 package main;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -22,10 +19,7 @@ public class Config {
                 "App.DELAY"
         };
         try {
-            URL resource = Application.class.getClassLoader().getResource("resources\\config.properties");
-            File file = new File(resource.toURI());
-            FileInputStream propFile = new FileInputStream(file);
-
+            InputStream propFile = Application.class.getClassLoader().getResourceAsStream("resources/config.properties");
             Properties prop = new Properties();
             prop.load(propFile);
             // get the property values
@@ -35,7 +29,6 @@ public class Config {
                 properties.put(key, Integer.parseInt(value));
             }
         } catch(IOException ignored) {
-        } catch (URISyntaxException ignored) {
         }
         return properties;
     }

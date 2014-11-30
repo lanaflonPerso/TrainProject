@@ -21,8 +21,8 @@ public class Light extends JPanel {
         this.name = name;
         this.enable = true;
         this.position = position;
-        imageGreen = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\l_green.png")).getImage();
-        imageRed = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\l_red.png")).getImage();
+        imageGreen = new ImageIcon(getClass().getClassLoader().getResource("resources/img/l_green.png")).getImage();
+        imageRed = new ImageIcon(getClass().getClassLoader().getResource("resources/img/l_red.png")).getImage();
 
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));

@@ -25,9 +25,9 @@ public class Switch extends JPanel implements Location {
         direction.add(Core.s2);
         // out: стан “1↔2”
 
-        this.p12 = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\p_12.png")).getImage();
-        this.p13 = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\p_13.png")).getImage();
-        this.p23 = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\p_23.png")).getImage();
+        this.p12 = new ImageIcon(getClass().getClassLoader().getResource("resources/img/p_12.png")).getImage();
+        this.p13 = new ImageIcon(getClass().getClassLoader().getResource("resources/img/p_13.png")).getImage();
+        this.p23 = new ImageIcon(getClass().getClassLoader().getResource("resources/img/p_23.png")).getImage();
 
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));

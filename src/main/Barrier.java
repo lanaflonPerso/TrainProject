@@ -35,7 +35,7 @@ public class Barrier extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         String state = (this.enable) ? "green" : "red";
-        image = new ImageIcon(getClass().getClassLoader().getResource("resources\\img\\b" + id + "_" + state + ".png")).getImage();
+        image = new ImageIcon(getClass().getClassLoader().getResource("resources/img/b" + id + "_" + state + ".png")).getImage();
         int posX = 0, posY = 0;
         if (this.id == 1) {
             posX = 23;
