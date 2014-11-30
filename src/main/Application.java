@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Hashtable;
 
 /**
@@ -35,6 +34,9 @@ public class Application implements Runnable {
         // get properties
         prop = Config.getProperties();
 
+        // init all of the elements (trains, stations, barriers etc)
+        Core.init();
+
         frame = new JFrame("TrainProject");
         mainPanel = new JPanel();
         elementsPanel = new JPanel();
@@ -56,6 +58,12 @@ public class Application implements Runnable {
         mapPanel.setBackground(Color.ORANGE);
         elementsPanel.setBackground(Color.GREEN);
         interruptsPanel.setBackground(Color.BLUE);
+
+        // add all trains to map
+        mapPanel.setLayout(null);
+        for (Train t : Core.getAllT()) {
+            mapPanel.add(t);
+        }
 
         // main menu
         setMenuBar();
@@ -156,13 +164,50 @@ public class Application implements Runnable {
     public void run() {
         running = true;
         while (running) {
-            System.out.println(new Date());
+
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            for (Train t : Core.getAllT()) {
+                t.move();
+                t.checkLights();
+                t.checkBarriers();
+            }
+
+            for  (Station s : Core.getAllS()) { // для кожної станції
+                s.releaseTrainsFromStorage();
+                s.checkNewTrains();
+            }
+
+            consolePrint();
+
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException ignored) {
             }
+
             mapPanel.repaint();
         }
+    }
+
+    private void consolePrint() {
+        for (Train t : Core.getAllT()) {
+            System.out.println(t + ": " + t.position + "; " + t.location);
+            System.out.println("Остання станція: " + t.getLastDestination() + "; наступна: " + t.getNextDestination() + "; індекс: " + t.destinationIndex);
+            System.out.println();
+        }
+        for (Station s : Core.getAllS()) { // для кожної станції
+            System.out.print(s + " storage: ");
+            for(Train t : s.storage) {
+                System.out.print(t + "; ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        for (Light l : Core.getAllL()) {
+            System.out.print(l + " " + (l.enable ? "+" : "-") + "    ");
+            // out: змінює стан світлофора l на “червоний”
+            // out: світлофора l на мапі червоним кольором
+        }
+        System.out.println();
     }
 
     static public Hashtable<String, Integer> getProperties() {

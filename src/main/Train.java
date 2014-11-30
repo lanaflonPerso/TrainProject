@@ -1,14 +1,22 @@
 package main;
 
-public class Train {
+import javax.swing.*;
+import java.awt.*;
+import java.util.Hashtable;
+
+public class Train extends JPanel {
+    int id;
     String name; // Ім’я потяга
     public int destinationIndex; //Індекс маршруту, що відображає пункт призначення
     public Station[] route; // Маршрут -> route[destinationIndex] – поточний пункт
     public Cords position; // Поточні координати розміщення потяга
     public boolean action; // Чи рухається?
     public Location location;
+    private static int nextId;
+    private Image image;
 
     public Train(String name, Cords position) {
+        this.id = ++nextId;
         this.name = name;
         this.destinationIndex = 0;
         this.position = position;
@@ -19,9 +27,12 @@ public class Train {
             this.route[i++] = r;
         }
         this.action = false;
+        this.image = new ImageIcon("C:\\Users\\Light\\IdeaProjects\\TrainProject\\resources\\img\\t" + id + ".png").getImage();
+
+        Hashtable<String, Integer> prop = Config.getProperties();
+        this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
+        this.setOpaque(false);
         // out: малює потяг
-        // out: відображення стану “ набирає пасажирів ”
-        System.out.println(this + " набирає пасажирів");
     }
 
     /**
@@ -164,6 +175,11 @@ public class Train {
     public Station getNextDestination() {
         int index = (destinationIndex == 3) ? 0 : destinationIndex+1;
         return this.route[index];
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(image, position.x*40, position.y*40, null);
     }
 
     @Override
