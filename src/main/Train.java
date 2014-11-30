@@ -15,6 +15,7 @@ public class Train extends JPanel {
     public Cords position; // Поточні координати розміщення потяга
     public boolean action; // Чи рухається?
     public Location location;
+    public String state; // стан для відображення на панелі станів
     private static int nextId;
     private Image image;
 
@@ -30,6 +31,7 @@ public class Train extends JPanel {
             this.route[i++] = r;
         }
         this.action = false;
+        this.state = "на станції";
 
         try {
             this.image = ImageIO.read(new File("resources\\img\\t" + id + ".png"));
@@ -47,6 +49,13 @@ public class Train extends JPanel {
         Station[] ss = Core.getAllS();
         Switch p = Core.p;
         if (this.action) { // Якщо потяг рухається
+            for (Station s : ss) {
+                if (Cords.compare(this.position, s.position)) {
+                    // потяг виругає зі станції
+                    s.state = "вільна";
+                    break;
+                }
+            }
             // Пересування по дорозі
             Road road = (Road)location;
             int currentRoadIndex = road.way.indexOf(position);
@@ -65,7 +74,7 @@ public class Train extends JPanel {
             }
             position = road.way.get(nextRoadIndex);
             // out: змінює стан потяга на “рух (координати)”
-            // repaint
+            this.state = "рухається";
 
             // Перевірка зі станцією
             for (Station s : ss) {
@@ -73,6 +82,7 @@ public class Train extends JPanel {
                     this.action = false;
                     // Потяг на станції
                     this.location = s;
+                    this.state = "на станції " + s;
                     break;
                 }
             }
@@ -113,6 +123,7 @@ public class Train extends JPanel {
                 if (!l.enable) { // Червоний
                     if (this.action == true) { // потяг тільки прибув
                         this.action = false; // зупиняємо його на 1 ітерацію
+                        this.state = "на світлофорі " + l; // стан на панелі станів
                         //out: змінює стан потяга на “стоїть на світлофорі”
                     } else { // потяг вже постояв на світлофорі 1 ітерацію, відправляємо його
                         switchSystem(); // перемикаємо перемикач

@@ -51,9 +51,9 @@ public class Core {
         s3 = new Station("S3", new Cords(17,11));
 
         // задаємо маршрути для кожного потяга
-        t1.route = new Station[] {s2, s1, s3, s2, s1};
 //        SHOULD BE UNCOMMENTED
 //        t1.route = new Station[] {s2, s3, s1, s3};
+        t1.route = new Station[] {s2, s1, s3, s2, s1};
         t2.route = new Station[] {s1, s2, s3, s2};
         t3.route = new Station[] {s3, s1, s2, s1};
 

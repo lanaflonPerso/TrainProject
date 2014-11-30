@@ -6,6 +6,7 @@ package main;
 public class Station implements Location {
     String name; // Ім’я станції
     Cords position; // Координати розміщення станції
+    public String state; // стан на панелі станів
     public Train[] storage; // Перелік потягів на станції
     public int storageSize; // Кількість потягів на станції
 
@@ -14,8 +15,7 @@ public class Station implements Location {
         this.position = position;
         storage = new Train[3];
         // ініціювання пустих this.storage
-        int i = 0;
-        storageSize = i;
+        this.state = "---";
     }
 
     boolean storageEmpty() {
@@ -40,6 +40,8 @@ public class Station implements Location {
     public void trainArrived(Train t) {
         // out:  "Приймає потяг T" - стан станції
         // out:  “випускає пасажирів” - стан потяга
+
+        this.state =  "приймає " + t;
         System.out.println(this + " приймає потяг " + t);
         System.out.println(t + " випускає пасажирів на " + this);
         storage[storageSize++] = t;
@@ -65,6 +67,7 @@ public class Station implements Location {
                     storageSize--;
                     // out: потяг набирає пасажирів
                     System.out.println(t + " набирає пасажирів на " + this);
+                    this.state =  "відправляє " + t;
 
                     t.location = nextRoad; // ставить потяг на дорогу
                     t.action = true;
@@ -124,25 +127,25 @@ public class Station implements Location {
         } else if (rHead != null) {
             return rHead; // головна дорога
         }
-        if (rHead != null) {
-            System.out.println("rHead: " + rHead.isEmpty());
-            System.out.println("r1p: " + r1p.isEmpty());
-            System.out.println("r2p: " + r2p.isEmpty());
-        }
-        // Якщо вільні дві допоміжних дороги
-        if ((r1p.isEmpty())&&(r2p.isEmpty())) {
+        // Якщо вільні 3 допоміжних дороги
+        if ((Core.r1p.isEmpty())&&(Core.r2p.isEmpty())&&(Core.r3p.isEmpty())) {
             if (this == Core.s1 || (this == Core.s2 && rHead == null)) // або це станція s2 за умови, що дорога - між S2-S3
                 return r1p; // R1p
             else
                 return r2p; // R2p
         } else { // або на першій, або на другій дорозі (або і там, і там) точно є потяг
-            for (Train t : Core.getTrainsOnRoad(r1p)) {
+            for (Train t : Core.getTrainsOnRoad(Core.r1p)) {
                 // потяг прямує до станції, на якій знаходиться даний
                 if (t.getNextDestination() == this)
                     return null; // дороги зайняті
             }
             // аналогічно для другої дороги
-            for (Train t : Core.getTrainsOnRoad(r2p)) {
+            for (Train t : Core.getTrainsOnRoad(Core.r2p)) {
+                if (t.getNextDestination() == this)
+                    return null;
+            }
+            // аналогічно для третьої дороги
+            for (Train t : Core.getTrainsOnRoad(Core.r3p)) {
                 if (t.getNextDestination() == this)
                     return null;
             }

@@ -36,8 +36,9 @@ public class Application implements Runnable {
 
         frame = new JFrame("TrainProject");
         mainPanel = new JPanel();
-        elementsPanel = new JPanel();
+        elementsPanel = new ElementsPanel();
         interruptsPanel = new JPanel();
+        mapPanel = new MapPanel(); // map
 
         // original icon
         try {
@@ -46,21 +47,15 @@ public class Application implements Runnable {
         } catch (IOException ignored) {
         }
 
-        // map
-        mapPanel = new MapPanel();
-
         running = false;
         thread =  new Thread(this, "Main Loop");
 
         mainPanel.setLayout(null);
         mapPanel.setBounds(prop.get("Map.PADDING_LEFT"), prop.get("Map.PADDING_TOP"), prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
-        elementsPanel.setBounds(prop.get("Map.WIDTH") + prop.get("ElementsPanel.PADDING_LEFT"), prop.get("ElementsPanel.PADDING_TOP"), prop.get("ElementsPanel.WIDTH"), prop.get("Map.HEIGHT"));
         interruptsPanel.setBounds(prop.get("InterruptsPanel.PADDING_LEFT"), prop.get("Map.HEIGHT") + prop.get("InterruptsPanel.PADDING_TOP"), prop.get("Window.WIDTH"), prop.get("InterruptsPanel.HEIGHT"));
 
-        elementsPanel.setLayout(new GridLayout(5, 2));
         // temporarily settings
         mapPanel.setBackground(Color.ORANGE);
-        elementsPanel.setBackground(Color.GREEN);
         interruptsPanel.setBackground(Color.BLUE);
 
         // add all trains to map
@@ -78,17 +73,6 @@ public class Application implements Runnable {
 
         // main menu
         setMenuBar();
-
-        // elements
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
-        elementsPanel.add(new JLabel("Test"));
 
         // add all parts to main Panel
         mainPanel.add(mapPanel);
@@ -187,6 +171,7 @@ public class Application implements Runnable {
             }
 
             mapPanel.repaint();
+            elementsPanel.repaint();
         }
     }
 
