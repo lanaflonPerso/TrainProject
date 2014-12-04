@@ -118,17 +118,9 @@ public class Station implements Location {
      * @return null – дороги зайняті
      */
     private Road getRoad(Road rHead, Road r1p, Road r2p, Station stationTo) {
-        if (rHead != null && !rHead.isEmpty()) { // Якщо головна дорога не пуста
-            for (Train t : Core.getTrainsOnRoad(rHead)) {
-                // потяг теж прямує до цієї ж станції, можна поїхати за ним
-                if (t.getNextDestination() == stationTo) {
-                    //                    if (t.position == this.position)
-                    int stationIndex = rHead.way.indexOf(this.position);
-                    int trainIndex   = rHead.way.indexOf(t.position);
-                    if (trainIndex - stationIndex > 2) // тримаємо дистанцію в 2 клітинки
-                        return rHead;
-                }
-            }
+        if (rHead != null && !rHead.isEmpty()) { // Якщо дорога не пуста
+            if (safeDistantion(rHead))
+                return rHead;
         } else if (rHead != null) {
             return rHead; // головна дорога
         }
@@ -138,7 +130,7 @@ public class Station implements Location {
                 return r1p; // R1p
             else
                 return r2p; // R2p
-        } else { // або на першій, або на другій дорозі (або і там, і там) точно є потяг
+        } else { // або на першій, або на другій дорозі (або і там, і там) точно є потяг (або на третій)
             for (Train t : Core.getTrainsOnRoad(Core.r1p)) {
                 // потяг прямує до станції, на якій знаходиться даний
                 if (t.getNextDestination() == this)
@@ -155,11 +147,40 @@ public class Station implements Location {
                     return null;
             }
             // жодний потяг не їде назустріч даному, можна вирушати
-            if (this == Core.s1 || (this == Core.s2 && rHead == null)) // або це станція s2 за умови, що дорога - між S2-S3
-                return r1p; // R1p
-            else
-                return r2p; // R2p
+            if (this == Core.s1 || (this == Core.s2 && rHead == null)) { // або це станція s2 за умови, що дорога - між S2-S3
+                if (safeDistantion(r1p))
+                    return r1p;
+            }
+            else {
+                if (safeDistantion(r2p))
+                    return r2p;
+            }
+            return null; // дистанція не дотримана, залишаємо потяг на станції
         }
+    }
+
+    /**
+     * Тримаємо дистанцію 2 клітинки
+     * @param r дорога, на якій відбувається перевірка
+     * @return true - якщо дистанція в 2 клітинки дотримується, false - якщо ні
+     */
+    private boolean safeDistantion(Road r) {
+        if (!r.isEmpty()) { // якщо дорога не пуста
+            for (Train t : Core.getTrainsOnRoad(r)) {
+                // потяг не їде на дану станцію, а їде з неї
+                if (t.getNextDestination() != this) {
+                    int stationIndex = r.way.indexOf(this.position);
+                    int trainIndex   = r.way.indexOf(t.position);
+                    if (trainIndex - stationIndex > 2 || trainIndex - stationIndex < -2) // тримаємо дистанцію в 2 клітинки
+                        return true; // можна поїхати за ним
+                    else
+                        return false; // дистанція не дотримана
+                } else {
+                    return false; // дорога зайнята, на станцію рухається потяг
+                }
+            }
+        }
+        return true;
     }
 
     @Override
