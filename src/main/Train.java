@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Hashtable;
 
 public class Train extends JPanel {
@@ -45,7 +46,7 @@ public class Train extends JPanel {
         if (this.action) { // Якщо потяг рухається
             for (Station s : ss) {
                 if (Cords.compare(this.position, s.position)) {
-                    // потяг виругає зі станції
+                    // потяг вирушає зі станції
                     s.state = "вільна";
                     break;
                 }
@@ -67,7 +68,6 @@ public class Train extends JPanel {
                     nextRoadIndex = currentRoadIndex+1;
             }
             position = road.way.get(nextRoadIndex);
-            // out: змінює стан потяга на “рух (координати)”
             this.state = "рухається";
 
             // Перевірка зі станцією
@@ -97,7 +97,7 @@ public class Train extends JPanel {
     /**
      * Перевірка шлагбаума
      */
-    public void checkBarriers() { // Потяг перед/після шлагбаума
+    public void checkBarriers() throws IOException { // Потяг перед/після шлагбаума
         Barrier[] bs = Core.getAllB();
         for (Barrier b : bs) {
             if ((Cords.compare(this.position, b.position.get(0))) || (Cords.compare(this.position, b.position.get(1))))
@@ -108,7 +108,7 @@ public class Train extends JPanel {
     /**
      * Перевірка світлофора
      */
-    public void checkLights() {
+    public void checkLights() throws IOException {
         Light[] ls = Core.getAllL();
         // Потяг на світлофорі
         for (Light l : ls) {
@@ -118,14 +118,13 @@ public class Train extends JPanel {
                     if (this.action == true) { // потяг тільки прибув
                         this.action = false; // зупиняємо його на 1 ітерацію
                         this.state = "на світлофорі " + l; // стан на панелі станів
-                        //out: змінює стан потяга на “стоїть на світлофорі”
+                        Core.log.write("Потяг " + this + " стоїть на світлофорі " + l + "\n");
                     } else { // потяг вже постояв на світлофорі 1 ітерацію, відправляємо його
                         switchSystem(); // перемикаємо перемикач
                         // дозволяємо потягу рухатися на наступній ітерації
                         this.action = true;
                     }
                 } else { // Зелений
-
                         switchSystem(); // перемикаємо перемикач тільки якщо потяг прибув до перемикача, а не відбуває
                 }
             }
@@ -146,21 +145,23 @@ public class Train extends JPanel {
     /**
      * Перемикається перемикач
      */
-    public void switchSystem() {
+    public void switchSystem() throws IOException {
         Switch p = Core.p;
         // оновлює світлофори, зеленими стають тільки світлофори зі сторін звідки і куди їде потяг
         Light[] ls = Core.getAllL();
         for (Light light : ls) {
             if (light == getLightByStation(getLastDestination()) || light == getLightByStation(getNextDestination())) {
                 light.enable = true;
+                Core.log.write("Світлофор " + light + " вмикає зелений колір" + "\n");
             } else {
                 light.enable = false;
+                Core.log.write("Світлофор " + light + " вмикає червоний колір" + "\n");
             }
         }
         // оновлюємо стан перемикача
         p.direction.set(0, getLastDestination()); // звідкіля їде потяг
         p.direction.set(1, getNextDestination()); // куди їде потяг
-        // out: перемикач змінює стан на “i↔j” та перемальовується
+        Core.log.write("Перемикач перемкнувся у стан: " + getLastDestination() + "↔" + getNextDestination() + "\n");
     }
 
     /**

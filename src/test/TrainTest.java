@@ -4,6 +4,8 @@ import main.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -66,7 +68,7 @@ public class TrainTest {
     }
 
 //    @Test
-    public void changeRoad() {
+    public void changeRoad() throws IOException {
         t1.position = new Cords(1,14);
         assertEquals(r2p, t1.location);
 
@@ -89,7 +91,7 @@ public class TrainTest {
     }
 
     @Test
-    public void cycleTest() {
+    public void cycleTest() throws IOException {
         while(true) {
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
             for (Train t : Core.getAllT()) {

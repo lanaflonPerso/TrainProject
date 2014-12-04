@@ -1,5 +1,7 @@
 package main;
 
+import java.io.IOException;
+
 /**
  * Станції
  */
@@ -25,7 +27,7 @@ public class Station implements Location {
     /**
      * Перевірка приїзду потяга
      */
-    public void checkNewTrains() {
+    public void checkNewTrains() throws IOException {
         for(Train t : Core.getAllT()) {
             if (Cords.compare(this.position, t.position) // якщо потяг на станції
                     && !isInStorage(t) && !t.action) { // якщо потяг ще не доданий у склад (!t.action - не чіпати тих, які готові до відправки наступної ітерації)
@@ -37,16 +39,16 @@ public class Station implements Location {
     /**
      * Запис про приїзд потяга
      */
-    public void trainArrived(Train t) {
-        // out:  "Приймає потяг T" - стан станції
-        // out:  “випускає пасажирів” - стан потяга
+    public void trainArrived(Train t) throws IOException {
 
         this.state =  "приймає " + t;
-        System.out.println(this + " приймає потяг " + t);
-        System.out.println(t + " випускає пасажирів на " + this);
+        /*System.out.println(this + " приймає потяг " + t);
+        System.out.println(t + " випускає пасажирів на " + this);*/
+        Core.log.write(this + " приймає потяг " + t + "\n");
+        Core.log.write(t + " випускає пасажирів на " + this + "\n");
         storage[storageSize++] = t;
         t.setNextDestination();
-        if (t.location == null) { // костиль - не збільшувати індекс, якщо це етап ініціалізації
+        if (t.location == null) { // не збільшувати індекс, якщо це етап ініціалізації
             t.destinationIndex--;
         }
     }
@@ -54,7 +56,7 @@ public class Station implements Location {
     /**
      * Підготовка до відправлення потяга
      */
-    public void releaseTrainsFromStorage() {
+    public void releaseTrainsFromStorage() throws IOException {
         if (!this.storageEmpty()) { // якщо є потяги на станції
             for (int i = 0; i < storageSize; i++) {
                 Train t = storage[i];
@@ -65,26 +67,26 @@ public class Station implements Location {
                     // дозволяє при наступній ітерації випустити потяг
                     storage[i] = null;
                     storageSize--;
-                    // out: потяг набирає пасажирів
                     System.out.println(t + " набирає пасажирів на " + this);
+                    Core.log.write(t + " набирає пасажирів на " + this + "\n");
                     this.state =  "відправляє " + t;
 
                     t.location = nextRoad; // ставить потяг на дорогу
                     t.action = true;
                     System.out.println("ROAD CHANGED TO " + nextRoad);
                 } else {
-                    // out: стан станції "потяг затримується з відправкою"
                     System.out.println(t + " затримується з відправкою");
+                    Core.log.write(t + " затримується з відправкою" + "\n");
                 }
             }
-        } else {
-            // out: стан станції " <Пусто>"
         }
     }
 
- /* S1↔S2: R12; R2p i R1p
+ /*
+    S1↔S2: R12; R2p i R1p
 	S1↔S3:	R13; R2p i R3p
-    S2↔S3:	R2p i R3p */
+    S2↔S3:	R2p i R3p
+ */
 
     /**
      * @return дорога, потрібна для руху потяга, або null, якщо дороги зайняті

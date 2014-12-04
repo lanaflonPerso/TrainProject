@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -26,9 +27,10 @@ public class Barrier extends JPanel {
     }
 
     // Змінна стану шлагбаума
-    public void changeStage() {
+    public void changeStage() throws IOException {
         this.enable = !this.enable;
         System.out.println(this + " змінив стан на " + enable);
+        Core.log.write("Шлагбаум " + this + " змінив стан на: " + (enable ? "рух автомобілям дозволено\n" : "рух автомобілям заборонено\n"));
         // out: змінює стан шлагбаума та перемальовує
     }
 

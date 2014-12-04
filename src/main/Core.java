@@ -3,6 +3,8 @@ package main;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.Properties;
 
 /**
  * Created by Light on 27.11.2014.
@@ -16,6 +18,7 @@ public class Core {
     public static Road r12, r13, r1p, r2p, r3p;
 
     public static Writer log;
+    public static File logFile;
 
     public static Station[] getAllS() {
         return new Station[] {s1, s2, s3};
@@ -35,13 +38,7 @@ public class Core {
 
     public static void init() {
         // log
-        try {
-            log = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream("log.txt"), "utf-8"));
-            log.write("Something");
-        } catch (IOException ignored) {
-            // report
-        }
+        logInit();
         // починаємо створення елементів з нульового
         Train.nextId = 0;
         Light.nextId = 0;
@@ -127,6 +124,15 @@ public class Core {
         l1 = new Light("L1", new Cords(8,10));
         l2 = new Light("L2", new Cords(7,11));
         l3 = new Light("L3", new Cords(9,11));
+    }
+
+    public static void logInit() {
+        logFile = new File("log.txt");
+        try {
+            log = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("log.txt"), "utf-8"));
+        } catch (IOException ignored) {
+        }
     }
 
     public static ArrayList<Train> getTrainsOnRoad(Road r) {
