@@ -121,8 +121,13 @@ public class Station implements Location {
         if (rHead != null && !rHead.isEmpty()) { // Якщо головна дорога не пуста
             for (Train t : Core.getTrainsOnRoad(rHead)) {
                 // потяг теж прямує до цієї ж станції, можна поїхати за ним
-                if (t.getNextDestination() == stationTo)
-                    return rHead;
+                if (t.getNextDestination() == stationTo) {
+                    //                    if (t.position == this.position)
+                    int stationIndex = rHead.way.indexOf(this.position);
+                    int trainIndex   = rHead.way.indexOf(t.position);
+                    if (trainIndex - stationIndex > 2) // тримаємо дистанцію в 2 клітинки
+                        return rHead;
+                }
             }
         } else if (rHead != null) {
             return rHead; // головна дорога
