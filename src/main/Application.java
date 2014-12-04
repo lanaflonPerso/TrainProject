@@ -23,6 +23,8 @@ public class Application implements Runnable {
     static Hashtable<String, Integer> prop;
 
     JMenu startButton;
+    JMenu pauseButton;
+    JMenu stopButton;
 
     public Application() {
         // get properties
@@ -52,7 +54,7 @@ public class Application implements Runnable {
         mapPanel.setBackground(Color.ORANGE);
         interruptsPanel.setBackground(Color.BLUE);
 
-        // add all trains to map
+        // add all items to map
         mapPanel.setLayout(null);
         for (Train t : Core.getAllT()) {
             mapPanel.add(t);
@@ -79,6 +81,8 @@ public class Application implements Runnable {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
+
+        thread.start();
     }
 
     private void setMenuBar() {
@@ -91,8 +95,29 @@ public class Application implements Runnable {
         menuBar.add(startButton);
         startButton.addMenuListener(new MenuListener() {
             public void menuSelected(MenuEvent e) {
-                System.out.println("menuSelected");
-                thread.start();
+                System.out.println("Start");
+                startExecution();
+                running = true;
+            }
+            public void menuDeselected(MenuEvent e) {}
+            public void menuCanceled(MenuEvent e) {}
+        });
+        pauseButton = new JMenu("Пауза");
+        menuBar.add(pauseButton);
+        pauseButton.addMenuListener(new MenuListener() {
+            public void menuSelected(MenuEvent e) {
+                System.out.println("Pause");
+                pauseExecution();
+            }
+            public void menuDeselected(MenuEvent e) {}
+            public void menuCanceled(MenuEvent e) {}
+        });
+        stopButton = new JMenu("Стоп");
+        menuBar.add(stopButton);
+        stopButton.addMenuListener(new MenuListener() {
+            public void menuSelected(MenuEvent e) {
+                System.out.println("Stop");
+                stopExecution();
             }
             public void menuDeselected(MenuEvent e) {}
             public void menuCanceled(MenuEvent e) {}
@@ -115,15 +140,12 @@ public class Application implements Runnable {
         myItem = new JMenuItem("Вихід");
         myMenu.add(myItem);
         myItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
                 int exitResult = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете завершити роботу програми?", "Вихід з програми", JOptionPane.ERROR_MESSAGE);
                 if (exitResult == 0) {
-                    System.exit(0);
+                    stopExecution();
+//                    System.exit(0);
                 }
-                // remove it
-                // remove it
-                // remove it
-                running = false;
             }
         });
         return myMenu;
@@ -142,30 +164,32 @@ public class Application implements Runnable {
 
     @Override
     public void run() {
-        running = true;
-        while (running) {
+//        running = true;
+        while (true) {
+            String x3WhyButItWorksWithIt = running + ""; // костиль
+            if (this.running) {
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                for (Train t : Core.getAllT()) {
+                    t.move();
+                    t.checkLights();
+                    t.checkBarriers();
+                }
 
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            for (Train t : Core.getAllT()) {
-                t.move();
-                t.checkLights();
-                t.checkBarriers();
+                for  (Station s : Core.getAllS()) { // для кожної станції
+                    s.releaseTrainsFromStorage();
+                    s.checkNewTrains();
+                }
+
+                consolePrint();
+
+                try {
+                    Thread.sleep(prop.get("App.DELAY"));
+                } catch (InterruptedException ignored) {
+                }
+
+                mapPanel.repaint();
+                elementsPanel.repaint();
             }
-
-            for  (Station s : Core.getAllS()) { // для кожної станції
-                s.releaseTrainsFromStorage();
-                s.checkNewTrains();
-            }
-
-            consolePrint();
-
-            try {
-                Thread.sleep(prop.get("App.DELAY"));
-            } catch (InterruptedException ignored) {
-            }
-
-            mapPanel.repaint();
-            elementsPanel.repaint();
         }
     }
 
@@ -185,6 +209,33 @@ public class Application implements Runnable {
         System.out.println();
     }
 
+    private void startExecution() {
+        running = true;
+    }
+
+    private void pauseExecution() {
+        running = false;
+    }
+
+    private void stopExecution() {
+        running = false;
+        try {Core.log.close();} catch (Exception ignored) {}
+        // init all of the elements (trains, stations, barriers etc)
+        Core.init();
+        // add all items to map
+        mapPanel.setLayout(null);
+        for (Train t : Core.getAllT()) {
+            mapPanel.add(t);
+        }
+        for (Light l: Core.getAllL()) {
+            mapPanel.add(l);
+        }
+        for (Barrier b: Core.getAllB()) {
+            mapPanel.add(b);
+        }
+        mapPanel.add(Core.p);
+    }
+add mapItemsInit
     static public Hashtable<String, Integer> getProperties() {
         return (Hashtable<String, Integer>)prop.clone();
     }

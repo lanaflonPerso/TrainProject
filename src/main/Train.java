@@ -13,7 +13,7 @@ public class Train extends JPanel {
     public boolean action; // Чи рухається?
     public Location location;
     public String state; // стан для відображення на панелі станів
-    private static int nextId;
+    static int nextId;
     private Image image;
 
     public Train(String name, Cords position) {

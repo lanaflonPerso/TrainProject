@@ -12,14 +12,14 @@ public class Light extends JPanel {
     String name; // Ім’я світлофора
     public boolean enable; // Вкл./Викл.
     public Cords position; // Координати розміщення світлофора
-    private static int nextId;
+    static int nextId;
     private Image imageGreen;
     private Image imageRed;
 
     public Light (String name, Cords position) {
         this.id = ++nextId;
         this.name = name;
-        this.enable = true;
+        this.enable = (id == 1) ? false : true; // only 2 lights can be switched on (2 and 3)
         this.position = position;
         imageGreen = new ImageIcon(getClass().getClassLoader().getResource("resources/img/l_green.png")).getImage();
         imageRed = new ImageIcon(getClass().getClassLoader().getResource("resources/img/l_red.png")).getImage();

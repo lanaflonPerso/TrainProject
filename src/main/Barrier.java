@@ -10,7 +10,7 @@ public class Barrier extends JPanel {
     String name; // Ім’я шлагбаума
     boolean enable; // Вкл./Викл.
     ArrayList<Cords> position; // Координати розміщення датчиків шлагбаума
-    private static int nextId;
+    static int nextId;
     private Image image;
 
     public Barrier(String name, ArrayList<Cords> position){
