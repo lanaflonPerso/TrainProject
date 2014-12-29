@@ -23,7 +23,6 @@ public class Barrier extends JPanel {
         Hashtable<String, Integer> prop = Config.getProperties();
         this.setSize(prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
         this.setOpaque(false);
-        // out: стан “відкритий”
     }
 
     // Змінна стану шлагбаума
@@ -31,7 +30,6 @@ public class Barrier extends JPanel {
         this.enable = !this.enable;
         System.out.println(this + " змінив стан на " + enable);
         Core.log.write("Шлагбаум " + this + " змінив стан на: " + (enable ? "рух автомобілям дозволено\n" : "рух автомобілям заборонено\n"));
-        // out: змінює стан шлагбаума та перемальовує
     }
 
     public void paintComponent(Graphics g) {

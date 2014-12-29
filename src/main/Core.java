@@ -3,8 +3,6 @@ package main;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Properties;
 
 /**
  * Created by Light on 27.11.2014.

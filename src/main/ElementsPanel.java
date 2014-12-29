@@ -33,9 +33,9 @@ public class ElementsPanel extends JPanel {
                     labels[i][j].setPreferredSize(new Dimension(100,60));
                     labels[i][j].setFont(new Font("Times New Roman", Font.BOLD, 22));
                     labels[i][j].setForeground(new Color(0x1C4387));
-                } else if (j == 1) {
-                    labels[i][j].setFont(new Font("Times New Roman", Font.BOLD, 16));
-                } else if (j == 2) {
+                } else if (j == 1) { // state
+                    labels[i][j].setFont(new Font("Times New Roman", Font.BOLD, 14));
+                } else if (j == 2) { // cords (for trains)
                     labels[i][j].setPreferredSize(new Dimension(100,60));
                     labels[i][j].setFont(new Font("Times New Roman", Font.BOLD, 20));
                 }

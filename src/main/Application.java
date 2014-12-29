@@ -6,9 +6,10 @@ import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -81,16 +82,49 @@ public class Application implements Runnable {
         }
         mapPanel.add(Core.p);
 
-        // temporarily settings
-        interruptsPanel.setBackground(Color.BLUE);
-
         mapPanel.setBounds(prop.get("Map.PADDING_LEFT"), prop.get("Map.PADDING_TOP"), prop.get("Map.WIDTH"), prop.get("Map.HEIGHT"));
+
+        // Interrupts panel
+        interruptsPanel.setLayout(new BoxLayout(interruptsPanel, BoxLayout.Y_AXIS));
         interruptsPanel.setBounds(prop.get("InterruptsPanel.PADDING_LEFT"), prop.get("Map.HEIGHT") + prop.get("InterruptsPanel.PADDING_TOP"), prop.get("Window.WIDTH"), prop.get("InterruptsPanel.HEIGHT"));
+        interruptsPanel.setBackground(new Color(0xD8F7BA));
+        JLabel interruptsText = new JLabel("F1 - перекшода для T1,           F2 - перекшода для T2,           F3 - перекшода для T3");
+        interruptsText.setPreferredSize(new Dimension(prop.get("Window.WIDTH"), 50));
+        interruptsText.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        interruptsText.setAlignmentX(Component.CENTER_ALIGNMENT);
+        interruptsPanel.add(interruptsText);
 
         // add all parts to main Panel
         mainPanel.add(mapPanel);
         mainPanel.add(elementsPanel);
         mainPanel.add(interruptsPanel);
+
+        mainPanel.setFocusable(true);
+        mainPanel.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                int key = e.getKeyCode();
+                System.out.println(key);
+                try {
+                    if (key == 112) { // T1
+                        Core.t1.interrupt1 = 1;
+                        Core.t1.state = "перешкода";
+                        System.out.println("Перешкода перед потягом T1");
+                        Core.log.write("Перешкода перед потягом T1\n");
+                    } else if (key == 113) { // T2
+                        Core.t2.interrupt1 = 1;
+                        Core.t2.state = "перешкода";
+                        System.out.println("Перешкода перед потягом T2");
+                        Core.log.write("Перешкода перед потягом T2\n");
+                    } else if (key == 114) { // T3
+                        Core.t3.interrupt1 = 1;
+                        Core.t3.state = "перешкода";
+                        System.out.println("Перешкода перед потягом T3");
+                        Core.log.write("Перешкода перед потягом T3\n");
+                    }
+                } catch (IOException ignored) {
+                }
+            }
+        });
 
         frame.add(mainPanel);
     }
@@ -105,12 +139,12 @@ public class Application implements Runnable {
         menuBar.add(startButton);
         startButton.addMenuListener(new MenuListener() {
             public void menuSelected(MenuEvent e) {
+                startExecution();
                 try {
                     Core.log.write(" *** Виконання програми розпочато \n");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-                startExecution();
             }
             public void menuDeselected(MenuEvent e) {}
             public void menuCanceled(MenuEvent e) {}
@@ -147,19 +181,25 @@ public class Application implements Runnable {
                 }
             }
         });
-        myItem = new JMenuItem("Пункт 2");
+        myItem = new JMenuItem("Маршрути потягів");
+        myMenu.add(myItem);
+        myItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Desktop.getDesktop().open(new File("src/resources/routes.txt"));
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                }
+            }
+        });
 //        myItem.setEnabled(false);
-        myMenu.add(myItem);
-        myItem = new JMenuItem("Пункт 3");
-        myMenu.add(myItem);
-        myItem = new JMenuItem("Пункт 4");
         myMenu.add(myItem);
         myMenu.addSeparator();
         myItem = new JMenuItem("Вихід");
         myMenu.add(myItem);
         myItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int exitResult = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете завершити роботу програми?", "Вихід з програми", JOptionPane.ERROR_MESSAGE);
+                int exitResult = JOptionPane.showConfirmDialog(null, "Ви впевнені, що хочете завершити роботу програми?", "Вихід з програми", JOptionPane.YES_NO_OPTION);
                 if (exitResult == 0) {
                     prepareLog();
                     System.exit(0);
@@ -190,9 +230,35 @@ public class Application implements Runnable {
 //                    System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     Core.log.write("-----------------------------------------------------\n" + new Date() + ":\n\n");
                     for (Train t : Core.getAllT()) {
-                        t.move();
-                        t.checkLights();
-                        t.checkBarriers();
+                        // переривання
+                        if (t.isInterrupted()) {
+                            if (t.interrupt1 != 0) { // переривання 1
+                                switch (t.interrupt1) {
+                                    case 1:
+                                        System.out.println("Потяг " + t + " подає звуковий сигнал");
+                                        Core.log.write("Потяг " + t + " подає звуковий сигнал\n");
+                                        t.interrupt1++;
+                                        break;
+                                    case 2:
+                                        System.out.println("Потяг " + t + " зупинився перед перешкодою");
+                                        Core.log.write("Потяг " + t + " зупинився перед перешкодою\n");
+                                        t.interrupt1++;
+                                        break;
+                                    case 3:
+                                        System.out.println("Машиніст потяга " + t + " усунув перешкоду");
+                                        Core.log.write("Машиніст потяга " + t + " усунув перешкоду\n");
+                                        t.interrupt1 = 0;
+                                        break;
+                                }
+
+                            } else if (t.interrupt2 != 0) { // переривання 2
+
+                            }
+                        } else {
+                            t.move();
+                            t.checkLights();
+                            t.checkBarriers();
+                        }
                     }
 
                     for (Station s : Core.getAllS()) { // для кожної станції

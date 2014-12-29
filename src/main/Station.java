@@ -174,7 +174,7 @@ public class Station implements Location {
                 if (t.getNextDestination() != this) {
                     int stationIndex = r.way.indexOf(this.position);
                     int trainIndex   = r.way.indexOf(t.position);
-                    if (trainIndex - stationIndex > 2 || trainIndex - stationIndex < -2) // тримаємо дистанцію в 2 клітинки
+                    if (trainIndex - stationIndex > 3 || trainIndex - stationIndex < -3) // тримаємо дистанцію в 3 клітинки
                         return true; // можна їхати за ним
                     else
                         return false; // дистанція не дотримана

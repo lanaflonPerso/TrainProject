@@ -4,8 +4,10 @@
     <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="0335294AE585B49777EE38E10A1397BB" />
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/lalka.properties" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
-

@@ -15,6 +15,8 @@ public class Train extends JPanel {
     public Location location;
     public String state; // стан для відображення на панелі станів
     static int nextId;
+    public char interrupt1;
+    public char interrupt2;
     private Image image;
 
     public Train(String name, Cords position) {
@@ -191,6 +193,10 @@ public class Train extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, position.x*40, position.y*40, null);
+    }
+
+    public boolean isInterrupted() {
+        return (interrupt1 != 0 || interrupt2 != 0);
     }
 
     @Override
