@@ -10,24 +10,21 @@ public class Config {
     /**
      * Get properties from config file
      */
-    public static Hashtable getProperties() {
-        String[] keys = new String[] {
-                "Window.WIDTH", "Window.HEIGHT",
-                "Map.WIDTH", "Map.HEIGHT", "Map.PADDING_LEFT", "Map.PADDING_TOP",
-                "ElementsPanel.WIDTH", "ElementsPanel.PADDING_LEFT", "ElementsPanel.PADDING_LEFT", "ElementsPanel.PADDING_TOP",
-                "InterruptsPanel.HEIGHT", "InterruptsPanel.PADDING_LEFT", "InterruptsPanel.PADDING_TOP",
-                "App.DELAY"
-        };
+    public static Hashtable<String, Integer> getProperties() {
         try {
             InputStream propFile = Application.class.getClassLoader().getResourceAsStream("resources/config.properties");
+            // так теж працює
+            // InputStream propFile = Application.class.getResourceAsStream("../resources/config.properties");
             Properties prop = new Properties();
             prop.load(propFile);
+            propFile.close();
+
             // get the property values
-            String value;
-            for (String key : keys) {
-                value = prop.getProperty(key);
+            for (String key : prop.stringPropertyNames()) {
+                String value = prop.getProperty(key);
                 properties.put(key, Integer.parseInt(value));
             }
+
         } catch(IOException ignored) {
         }
         return properties;
